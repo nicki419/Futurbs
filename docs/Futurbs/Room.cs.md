@@ -1,14 +1,14 @@
 # Room.cs
-This is the documentation for WorldOfZuul/Room.cs
+This is the documentation for `WorldOfZuul/Room.cs`.
 
 ---
 
-### Room {#room}
-Room is a public class in Room.cs.
+### Room
+Room is a public class in `Room.cs`.
 
 ---
 
-### Room Object {#room_object}
+### Room Object 
 ```csharp
 public Room(string shortDesc, string longDesc)
 ```
@@ -22,7 +22,7 @@ Room? outside = new("Outside", "You are standing outside the main entrance of th
 
 ---
 
-### Room.SetExit() {#room_setexit}
+### Room.SetExit() 
 ```csharp
 public void SetExit(string direction, Room? neighbor)
 ```
@@ -35,7 +35,7 @@ theatre.SetExit("west", outside);
 
 ---
 
-### Room.SetExits() {#room_setexits}
+### Room.SetExits() 
 ```csharp
 public void SetExits(Room? north, Room? east, Room? south, Room? west)
 ```
