@@ -11,6 +11,7 @@ namespace WorldOfZuul
         public string Name { get; }
         public string? SecondWord { get; } // this might be used for future expansions, such as "take apple".
 
+        // Change variable names to be more coherent
         public Command(string name, string? secondWord = null)
         {
             Name = name;

@@ -10,8 +10,10 @@
             CreateRooms();
         }
 
+
         private void CreateRooms()
         {
+            // Initialising the entire Map
   
             Room? outside = new("Outside", "You are standing outside the main entrance of the university. To the east is a large building, to the south is a computing lab, and to the west is the campus pub.");
             Room? theatre = new("Theatre", "You find yourself inside a large lecture theatre. Rows of seats ascend up to the back, and there's a podium at the front. It's quite dark and quiet.");
