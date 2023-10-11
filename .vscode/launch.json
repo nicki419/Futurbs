@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/WorldOfZuul/bin/Debug/net6.0/WorldOfZuul.dll",
+            "program": "${workspaceFolder}/WorldOfZuul/bin/Debug/net7.0/WorldOfZuul.dll",
             "args": [],
             "cwd": "${workspaceFolder}/WorldOfZuul",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
