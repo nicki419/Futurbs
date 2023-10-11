@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "KhCLctOoBYaFyqDYtxfbGGbsHDjIB79hl1YjZZKCwZgmRu7e/3XY2RSb4SiYV3ZQ7Pz4eX2oHmVueOX1L/4T9g==",
+  "dgSpecHash": "vQtOaCsfyOxAjGXxBGwWxfvpFdhC5vCe6e4Gmkah9j4dBmxxE94IaZzzvBn1fqo4FNvN3V6qqqfEa0NmzZPKBw==",
   "success": true,
-  "projectFilePath": "/home/nick/Desktop/Uni/SDU Semester 1/Semester Project: Development of Software Programs/Futurbs/WorldOfZuul/WorldOfZuul.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/WorldOfZuul.csproj",
+  "expectedPackageFiles": [
+    "/home/nick/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.11/microsoft.aspnetcore.app.ref.7.0.11.nupkg.sha512"
+  ],
   "logs": []
 }
