@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "WcyMA7hPgsxbjuCtKcZJI1yaVDDcjRftfXwRqDI5+k2voQ6vU9ipEguiEY+1yopRcrUtXwrMckxBKytQ9/oiBQ==",
+  "success": true,
+  "projectFilePath": "/home/nick/Desktop/Uni/SDU Semester 1/Semester Project: Development of Software Programs/Futurbs/WorldOfZuul/WorldOfZuul.csproj",
+  "expectedPackageFiles": [
+    "/home/nick/.nuget/packages/microsoft.netcore.app.ref/6.0.23/microsoft.netcore.app.ref.6.0.23.nupkg.sha512",
+    "/home/nick/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.23/microsoft.aspnetcore.app.ref.6.0.23.nupkg.sha512",
+    "/home/nick/.nuget/packages/microsoft.netcore.app.host.linux-x64/6.0.23/microsoft.netcore.app.host.linux-x64.6.0.23.nupkg.sha512"
+  ],
+  "logs": []
+}
