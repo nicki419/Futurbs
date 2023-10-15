@@ -1,9 +1,14 @@
-﻿namespace WorldOfZuul
+﻿using System.Diagnostics;
+
+namespace WorldOfZuul
 {
     public class Game
     {
         private Room? currentRoom;
         private Room? previousRoom;
+        private readonly Screen screen = new();
+        private bool textInput = false;
+        private string lastOutputString;
 
         public Game()
         {
@@ -38,61 +43,37 @@
         {
             Parser parser = new();
 
-            PrintWelcome();
-
             bool continuePlaying = true;
+            lastOutputString = $"Welcome to the World of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\n\n{currentRoom?.LongDescription}\n";
+
             while (continuePlaying)
             {
-                Console.WriteLine(currentRoom?.ShortDescription);
-                Console.Write("> ");
+                // If input type is text input
+                if(textInput == true) {
+                    screen.PrintScreen(lastOutputString, textInput);
 
-                string? input = Console.ReadLine();
+                    string? input = Console.ReadLine()?.ToLower();
+                    //string? input = "north";
 
-                if (string.IsNullOrEmpty(input))
-                {
-                    Console.WriteLine("Please enter a command.");
-                    continue;
-                }
+                    if (string.IsNullOrEmpty(input))
+                    {
+                        lastOutputString = $"Please enter a command.";
+                        continue;
+                    }
 
-                Command? command = parser.GetCommand(input);
+                    Command? command = parser.GetCommand(input);
 
-                if (command == null)
-                {
-                    Console.WriteLine("I don't know that command.");
-                    continue;
-                }
+                    if (command == null)
+                    {
+                        lastOutputString = $"I don't know that command.";
+                        continue;
+                    }
 
-                switch(command.Name)
-                {
-                    case "look":
-                        Console.WriteLine(currentRoom?.LongDescription);
-                        break;
-
-                    case "back":
-                        if (previousRoom == null)
-                            Console.WriteLine("You can't go back from here!");
-                        else
-                            currentRoom = previousRoom;
-                        break;
-
-                    case "north":
-                    case "south":
-                    case "east":
-                    case "west":
-                        Move(command.Name);
-                        break;
-
-                    case "quit":
-                        continuePlaying = false;
-                        break;
-
-                    case "help":
-                        PrintHelp();
-                        break;
-
-                    default:
-                        Console.WriteLine("I don't know what command.");
-                        break;
+                    continuePlaying = CommandHandler(command);
+                } 
+                // If input type is the menu navigation
+                else {
+                    screen.PrintScreen(lastOutputString, textInput);
                 }
             }
 
@@ -105,32 +86,64 @@
             {
                 previousRoom = currentRoom;
                 currentRoom = currentRoom?.Exits[direction];
+                lastOutputString = $"{currentRoom?.LongDescription}\n";
             }
             else
             {
-                Console.WriteLine($"You can't go {direction}!");
+                lastOutputString = $"You can't go {direction}!";
             }
         }
 
+        public bool CommandHandler(Command? command) {
 
-        private static void PrintWelcome()
-        {
-            Console.WriteLine("Welcome to the World of Zuul!");
-            Console.WriteLine("World of Zuul is a new, incredibly boring adventure game.");
-            PrintHelp();
-            Console.WriteLine();
+            switch(command?.Name)
+                {
+                    case "look":
+                        lastOutputString = $"{currentRoom?.LongDescription}\n";
+                        break;
+
+                    case "back":
+                        if (previousRoom == null)
+                            lastOutputString = "You can't go back from here!";
+                        else
+                            currentRoom = previousRoom;
+                            lastOutputString = $"{currentRoom?.LongDescription}\n";
+                        break;
+
+                    case "north":
+                    case "south":
+                    case "east":
+                    case "west":
+                        Move(command.Name);
+                        break;
+
+                    case "quit":
+                        return false;
+                        break;
+
+                    case "help":
+                        lastOutputString = PrintHelp();
+                        break;
+                    case "togglein":
+                        textInput = !textInput;
+                        break;
+
+                    default:
+                        // Console Write unnecessary because of earlier input evaluation, thus passed a debug note instead.
+                        Debug.WriteLine("Unexpected Error: Somehow, the default switch of CommandHandler() was triggered, which should not be possible. Ensure you validate the input passed to CommandHandler beforehand.");
+                        break;
+                }
+                return true;
         }
-
-        private static void PrintHelp()
+        private static string PrintHelp()
         {
-            Console.WriteLine("You are lost. You are alone. You wander");
-            Console.WriteLine("around the university.");
-            Console.WriteLine();
-            Console.WriteLine("Navigate by typing 'north', 'south', 'east', or 'west'.");
-            Console.WriteLine("Type 'look' for more details.");
-            Console.WriteLine("Type 'back' to go to the previous room.");
-            Console.WriteLine("Type 'help' to print this message again.");
-            Console.WriteLine("Type 'quit' to exit the game.");
+            return @"Navigate by typing 'north', 'south', 'east', or 'west'.
+'look'      - print more details about the current room.
+'back'      - go to the previous room.
+'help'      - print this message again.
+'toggleIn'  - toggle input mode between text and menu navigation.
+'quit'      - exit the game.
+            ";
         }
     }
 }
