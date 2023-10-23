@@ -144,6 +144,7 @@ namespace WorldOfZuul
                     break;
                 
                 case ConsoleKey.Enter:
+                    newCommand = activeCommand;
                     selectedCommand = activeCommand;
                     break;
             }
