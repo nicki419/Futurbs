@@ -7,8 +7,9 @@ namespace WorldOfZuul
         private Room? currentRoom;
         private Room? previousRoom;
         private readonly Screen screen = new();
-        private bool textInput = false;
-        private string lastOutputString;
+        public CommandWords.GameCommand activeCommand;
+        private bool textInput = true;
+        private string? lastOutputString;
 
         public Game()
         {
@@ -73,7 +74,17 @@ namespace WorldOfZuul
                 } 
                 // If input type is the menu navigation
                 else {
+                    
                     screen.PrintScreen(lastOutputString, textInput);
+                    string? input = screen.GetNewCommand();
+
+                    if (string.IsNullOrEmpty(input))
+                    {
+                        continue;
+                    }
+
+                    Command? command = parser.GetCommand(input);
+                    continuePlaying = CommandHandler(command);
                 }
             }
 
@@ -119,7 +130,7 @@ namespace WorldOfZuul
 
                     case "quit":
                         return false;
-                        break;
+                        //break;
 
                     case "help":
                         lastOutputString = PrintHelp();
