@@ -118,6 +118,9 @@ namespace WorldOfZuul
                     case "togglein":
                         textInput = !textInput;
                         break;
+                    case "minimap":
+                        map?.MiniMap();
+                        break;
 
                     default:
                         // Console Write unnecessary because of earlier input evaluation, thus passed a debug note instead.

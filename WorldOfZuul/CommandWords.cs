@@ -46,6 +46,7 @@ namespace WorldOfZuul
             /* Actions */ new List<GameCommand>() {
                 new("look", "Investigate your sorroundings", CommandCategory.Actions, 'l'),
                 new("help", "Print Help", CommandCategory.Actions, 'h'),
+                new("minimap", "Shows the mini map", CommandCategory.Actions, null),
             },
 
             /* Miscellaneous */ new List<GameCommand>() {

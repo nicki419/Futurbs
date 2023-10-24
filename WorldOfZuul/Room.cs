@@ -5,10 +5,10 @@
         public string ShortDescription { get; private set; }
         public string LongDescription { get; private set;}
 
-        public string north {get; private set;}
-        public string east {get; private set;}
-        public string south {get; private set;}
-        public string west {get; private set;}        
+        public string? north {get; private set;}
+        public string? east {get; private set;}
+        public string? south {get; private set;}
+        public string? west {get; private set;}        
         
         public Dictionary<string, Room> Exits { get; private set; } = new();
 

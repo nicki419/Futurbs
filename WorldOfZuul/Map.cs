@@ -64,7 +64,11 @@ namespace WorldOfZuul
 
         public void MiniMap()
         {
-            
+          if(currentRoom?.north != null) Console.WriteLine($"North - {currentRoom.north}");
+          if(currentRoom?.east != null) Console.WriteLine($"East - {currentRoom.east}");
+          if(currentRoom?.south != null) Console.WriteLine($"South - {currentRoom.south}");
+          if(currentRoom?.west != null) Console.WriteLine($"West - {currentRoom.west}");
+          
         }   
 
     
