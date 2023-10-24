@@ -12,11 +12,11 @@ namespace WorldOfZuul
         private bool textInput = true;
         private string? lastOutputString;
 
-        private Map? map;
+        private Map? Map;
 
         public Game()
         {
-            map?.CreateMap();
+            Map?.CreateMap();
         }
 
 
@@ -119,7 +119,7 @@ namespace WorldOfZuul
                         textInput = !textInput;
                         break;
                     case "minimap":
-                        map?.MiniMap();
+                        Map?.MiniMap();
                         break;
 
                     default:

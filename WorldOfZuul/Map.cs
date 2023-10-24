@@ -12,7 +12,7 @@ namespace WorldOfZuul
         
         public void CreateMap()
         {
-        Room? cityCentre = new("City Centre","");
+        Room? cityCentre = new("City Centre","The city center of Futurbs, the hustle and bustle of the town is loud and cheerful as if its the first day that you are visiting the town");
         Room? townHall = new("Town Hall","");
         Room? trainStation = new("Train Station","");
         Room? park1 = new("Park 1 ","");
