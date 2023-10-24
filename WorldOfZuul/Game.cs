@@ -7,7 +7,7 @@ namespace WorldOfZuul
     {
         private Room? currentRoom;
         private Room? previousRoom;
-        private Map? Map;
+        private readonly Map? map;
 
         private readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
@@ -18,12 +18,13 @@ namespace WorldOfZuul
 
         public Game()
         {
-            Map?.CreateMap();
+            map?.CreateMap();
         }
 
 
         public void Play()
         {
+            
             Parser parser = new();
 
             bool continuePlaying = true;
@@ -121,7 +122,7 @@ namespace WorldOfZuul
                         textInput = !textInput;
                         break;
                     case "minimap":
-                        Map?.MiniMap();
+                        map?.MiniMap();
                         break;
 
                     default:

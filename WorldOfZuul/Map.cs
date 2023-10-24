@@ -6,8 +6,7 @@ namespace WorldOfZuul
     public class Map
     {
         
-        public Room? currentRoom;
-        private Room? previousRoom;
+        private Room? currentRoom;
         
         
         public void CreateMap()
@@ -27,7 +26,6 @@ namespace WorldOfZuul
         Room? residentialArea2 = new("Residential Area 2","");
         Room? mayorsOffice = new("Mayors Office","");
 
-        currentRoom = cityCentre;
 
         cityCentre.SetExits(townHall, market, trainStation, park1);
 
@@ -57,6 +55,8 @@ namespace WorldOfZuul
 
         university.SetExits(park1, park2, null, null);
 
+        currentRoom = cityCentre;
+
 
 
         
@@ -68,6 +68,7 @@ namespace WorldOfZuul
           if(currentRoom?.east != null) Console.WriteLine($"East - {currentRoom.east}");
           if(currentRoom?.south != null) Console.WriteLine($"South - {currentRoom.south}");
           if(currentRoom?.west != null) Console.WriteLine($"West - {currentRoom.west}");
+          
           
         }   
 
