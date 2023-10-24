@@ -7,7 +7,9 @@ namespace WorldOfZuul
     {
         private Room? currentRoom;
         private Room? previousRoom;
-        private readonly Map? map;
+
+        // Don't forget to create a new object
+        private Map? map = new();
 
         private readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
@@ -18,7 +20,7 @@ namespace WorldOfZuul
 
         public Game()
         {
-            map?.CreateMap();
+            
         }
 
 
@@ -26,6 +28,9 @@ namespace WorldOfZuul
         {
             
             Parser parser = new();
+
+            currentRoom = map?.cityCentre;
+            
 
             bool continuePlaying = true;
             lastOutputString = $"Welcome to the World of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\n\n{currentRoom?.LongDescription}\n";
@@ -122,7 +127,7 @@ namespace WorldOfZuul
                         textInput = !textInput;
                         break;
                     case "minimap":
-                        map?.MiniMap();
+                        map?.MiniMap(currentRoom);
                         break;
 
                     default:
