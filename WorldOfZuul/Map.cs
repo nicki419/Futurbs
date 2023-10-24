@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Security.Cryptography.X509Certificates;
 
 namespace WorldOfZuul
@@ -6,9 +7,10 @@ namespace WorldOfZuul
     {
         
         private Room? currentRoom;
+        private Room? previousRoom;
         
         
-        private void CreateMap()
+        public void CreateMap()
         {
         Room? cityCentre = new("City Centre","");
         Room? townHall = new("Town Hall","");
@@ -60,12 +62,12 @@ namespace WorldOfZuul
         
         }
 
-        private void PrintMiniMap()
+        public void MiniMap()
         {
             
-        }
+        }   
 
-
+    
 
 
     }
