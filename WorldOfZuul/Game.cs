@@ -7,12 +7,14 @@ namespace WorldOfZuul
     {
         private Room? currentRoom;
         private Room? previousRoom;
+        private Map? Map;
+
         private readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
         private bool textInput = true;
         private string? lastOutputString;
 
-        private Map? Map;
+      
 
         public Game()
         {

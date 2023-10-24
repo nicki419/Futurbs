@@ -6,7 +6,7 @@ namespace WorldOfZuul
     public class Map
     {
         
-        private Room? currentRoom;
+        public Room? currentRoom;
         private Room? previousRoom;
         
         
