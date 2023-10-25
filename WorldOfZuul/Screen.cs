@@ -1,5 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
-
 namespace WorldOfZuul {
     public class Screen {
 
@@ -20,8 +18,6 @@ namespace WorldOfZuul {
                 }
 
                 Console.WriteLine(commandWords.GenerateCommandString(activeCommand));
-                //Just to require input for next loop iteration.
-                //Console.ReadKey();
                 
             }
         }
