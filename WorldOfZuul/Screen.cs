@@ -9,6 +9,9 @@ namespace WorldOfZuul {
 
         public void PrintScreen(string lastOutputString, bool textInput) {
             Console.Clear();
+
+            
+
             Console.WriteLine(lastOutputString);
 
             if(textInput == true) {

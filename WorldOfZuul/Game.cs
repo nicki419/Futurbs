@@ -127,7 +127,7 @@ namespace WorldOfZuul
                         textInput = !textInput;
                         break;
                     case "minimap":
-                        map?.MiniMap(currentRoom);
+                         map?.MiniMap(currentRoom);
                         break;
 
                     default:
