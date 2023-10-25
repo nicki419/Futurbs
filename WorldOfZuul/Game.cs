@@ -14,6 +14,7 @@ namespace WorldOfZuul
         private readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
         private bool textInput = true;
+        private bool mapToggle = false;
         private string? lastOutputString;
 
       
@@ -37,6 +38,14 @@ namespace WorldOfZuul
 
             while (continuePlaying)
             {
+                
+                if(mapToggle == true)
+                {
+                    lastOutputString += map?.MiniMap(currentRoom);
+                    screen.PrintScreen(lastOutputString, textInput);
+                }
+                
+                
                 // If input type is text input
                 if(textInput == true) {
                     screen.PrintScreen(lastOutputString, textInput);
@@ -127,7 +136,7 @@ namespace WorldOfZuul
                         textInput = !textInput;
                         break;
                     case "minimap":
-                         map?.MiniMap(currentRoom);
+                        map?.MiniMap(currentRoom);
                         break;
 
                     default:
