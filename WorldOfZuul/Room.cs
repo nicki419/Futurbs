@@ -2,6 +2,7 @@
 {
     public class Room
     {
+        public Building RoomBuilding;
         public string ShortDescription { get; private set; }
         public string LongDescription { get; private set;}
 
@@ -12,10 +13,13 @@
         
         public Dictionary<string, Room> Exits { get; private set; } = new();
 
-        public Room(string shortDesc, string longDesc)
+        public Room(string shortDesc, string longDesc, Building.State? state)
         {
             ShortDescription = shortDesc;
             LongDescription = longDesc;
+            RoomBuilding = new(shortDesc, longDesc);
+            if(state == null) RoomBuilding.BuildingState = Building.State.Built;
+            else RoomBuilding.BuildingState = state;
         }
 
         public void SetExits(Room? north, Room? east, Room? south, Room? west)

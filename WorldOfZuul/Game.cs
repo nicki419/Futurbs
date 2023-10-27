@@ -18,7 +18,6 @@ namespace WorldOfZuul
         private string? lastOutputString;
         private string? mapString;
 
-      
 
         public Game()
         {
@@ -134,6 +133,12 @@ namespace WorldOfZuul
                     case "minimap":
                         mapToggle = !mapToggle;
                         break;
+                    /*  UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
+                    case "build":
+                        lastOutputString = map.CreateBuilding("School", "Here Kids go to have 12 years of neverending fun!", (map.Rooms["recreationalArea1"], null, null, map.Rooms["ghetto"]));
+                        //lastOutputString += map.Rooms["School"].Exits["east"].ShortDescription;
+                        break;
+                    */
 
                     default:
                         // Console Write unnecessary because of earlier input evaluation, thus passed a debug note instead.
