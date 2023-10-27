@@ -5,17 +5,18 @@ namespace WorldOfZuul
 {
     public class Game
     {
-        private Room? currentRoom;
+        //private Room? map?.CurrentRoom;
         private Room? previousRoom;
 
         // Don't forget to create a new object
-        private Map? map = new();
+        private Map map = new();
 
         private readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
         private bool textInput = true;
         private bool mapToggle = false;
         private string? lastOutputString;
+        private string? mapString;
 
       
 
@@ -30,25 +31,20 @@ namespace WorldOfZuul
             
             Parser parser = new();
 
-            currentRoom = map?.cityCentre;
+            //map.CurrentRoom = map.cityCentre;
             
 
             bool continuePlaying = true;
-            lastOutputString = $"Welcome to the World of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\n\n{currentRoom?.LongDescription}\n";
+            lastOutputString = $"Welcome to the World of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\n\n{map?.CurrentRoom?.LongDescription}\n";
 
             while (continuePlaying)
             {
-                
-                if(mapToggle == true)
-                {
-                    lastOutputString += map?.MiniMap(currentRoom);
-                    screen.PrintScreen(lastOutputString, textInput);
-                }
-                
+                if(mapToggle) mapString = map?.MiniMap();
+                else mapString = null;
                 
                 // If input type is text input
                 if(textInput == true) {
-                    screen.PrintScreen(lastOutputString, textInput);
+                    screen.PrintScreen(lastOutputString, mapString, textInput, mapToggle);
 
                     string? input = Console.ReadLine()?.ToLower();
                     //string? input = "north";
@@ -72,7 +68,7 @@ namespace WorldOfZuul
                 // If input type is the menu navigation
                 else {
                     
-                    screen.PrintScreen(lastOutputString, textInput);
+                    screen.PrintScreen(lastOutputString, mapString, textInput, mapToggle);
                     string? input = screen.GetNewCommand();
 
                     if (string.IsNullOrEmpty(input))
@@ -90,11 +86,11 @@ namespace WorldOfZuul
 
         private void Move(string direction)
         {
-            if (currentRoom?.Exits.ContainsKey(direction) == true)
+            if (map?.CurrentRoom?.Exits.ContainsKey(direction) == true)
             {
-                previousRoom = currentRoom;
-                currentRoom = currentRoom?.Exits[direction];
-                lastOutputString = $"{currentRoom?.LongDescription}\n";
+                previousRoom = map.CurrentRoom;
+                map.CurrentRoom = map.CurrentRoom.Exits[direction];
+                lastOutputString = $"{map?.CurrentRoom?.LongDescription}\n";
             }
             else
             {
@@ -107,15 +103,15 @@ namespace WorldOfZuul
             switch(command?.Name)
                 {
                     case "look":
-                        lastOutputString = $"{currentRoom?.LongDescription}\n";
+                        lastOutputString = $"{map?.CurrentRoom?.LongDescription}\n";
                         break;
 
                     case "back":
                         if (previousRoom == null)
                             lastOutputString = "You can't go back from here!";
                         else
-                            currentRoom = previousRoom;
-                            lastOutputString = $"{currentRoom?.LongDescription}\n";
+                            map.CurrentRoom = previousRoom;
+                            lastOutputString = $"{map?.CurrentRoom?.LongDescription}\n";
                         break;
 
                     case "north":
@@ -136,7 +132,7 @@ namespace WorldOfZuul
                         textInput = !textInput;
                         break;
                     case "minimap":
-                        map?.MiniMap(currentRoom);
+                        mapToggle = !mapToggle;
                         break;
 
                     default:

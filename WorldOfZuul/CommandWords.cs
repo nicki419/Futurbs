@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Security;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ namespace WorldOfZuul
             /* Miscellaneous */ new List<GameCommand>() {
                 new("quit", "Exit the game", CommandCategory.Miscellaneous, null),
                 new("togglein", "Toggle between command input modes", CommandCategory.Miscellaneous, null),
-                new("minimap", "Toggles the mini map", CommandCategory.Actions, null),
+                new("minimap", "Toggles the mini map", CommandCategory.Miscellaneous, null),
             }
         };
 

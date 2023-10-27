@@ -7,12 +7,12 @@ namespace WorldOfZuul {
 
         public CommandWords.GameCommand activeCommand;
 
-        public Map? map = new();
+        //public Map map = new();
 
-        public void PrintScreen(string lastOutputString, bool textInput) {
+        public void PrintScreen(string lastOutputString, string? mapString, bool textInput, bool mapToggle) {
             Console.Clear();
 
-            
+            Console.WriteLine(mapString);
             Console.WriteLine(lastOutputString);
 
             if(textInput == true) {
