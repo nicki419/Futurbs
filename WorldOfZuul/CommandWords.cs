@@ -53,7 +53,7 @@ namespace WorldOfZuul
                 new("quit", "Exit the game", CommandCategory.Miscellaneous, null),
                 new("togglein", "Toggle between command input modes", CommandCategory.Miscellaneous, null),
                 // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT IN Game.cs -> CommandHandler
-                //new("minimap", "Toggles the mini map", CommandCategory.Miscellaneous, null),
+                new("minimap", "Toggles the mini map", CommandCategory.Miscellaneous, null),
             }
         };
 
