@@ -1,57 +1,49 @@
-﻿using System.Diagnostics;
+﻿using System.Data;
+using System.Diagnostics;
 
 namespace WorldOfZuul
 {
     public class Game
     {
-        private Room? currentRoom;
+        //private Room? map?.CurrentRoom;
         private Room? previousRoom;
+
+        // Don't forget to create a new object
+        private Map map = new();
+
         private readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
         private bool textInput = true;
+        private bool mapToggle = false;
         private string? lastOutputString;
+        private string? mapString;
+
 
         public Game()
         {
-            CreateRooms();
+            
         }
 
-
-        private void CreateRooms()
-        {
-            // Initialising the entire Map
-  
-            Room? outside = new("Outside", "You are standing outside the main entrance of the university. To the east is a large building, to the south is a computing lab, and to the west is the campus pub.");
-            Room? theatre = new("Theatre", "You find yourself inside a large lecture theatre. Rows of seats ascend up to the back, and there's a podium at the front. It's quite dark and quiet.");
-            Room? pub = new("Pub", "You've entered the campus pub. It's a cozy place, with a few students chatting over drinks. There's a bar near you and some pool tables at the far end.");
-            Room? lab = new("Lab", "You're in a computing lab. Desks with computers line the walls, and there's an office to the east. The hum of machines fills the room.");
-            Room? office = new("Office", "You've entered what seems to be an administration office. There's a large desk with a computer on it, and some bookshelves lining one wall.");
-
-            outside.SetExits(null, theatre, lab, pub); // North, East, South, West
-
-            theatre.SetExit("west", outside);
-
-            pub.SetExit("east", outside);
-
-            lab.SetExits(outside, office, null, null);
-
-            office.SetExit("west", lab);
-
-            currentRoom = outside;
-        }
 
         public void Play()
         {
+            
             Parser parser = new();
 
+            //map.CurrentRoom = map.cityCentre;
+            
+
             bool continuePlaying = true;
-            lastOutputString = $"Welcome to the World of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\n\n{currentRoom?.LongDescription}\n";
+            lastOutputString = $"Welcome to the World of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\n\n{map?.CurrentRoom?.LongDescription}\n";
 
             while (continuePlaying)
             {
+                if(mapToggle) mapString = map?.MiniMap();
+                else mapString = null;
+                
                 // If input type is text input
                 if(textInput == true) {
-                    screen.PrintScreen(lastOutputString, textInput);
+                    screen.PrintScreen(lastOutputString, mapString, textInput, mapToggle);
 
                     string? input = Console.ReadLine()?.ToLower();
                     //string? input = "north";
@@ -75,7 +67,7 @@ namespace WorldOfZuul
                 // If input type is the menu navigation
                 else {
                     
-                    screen.PrintScreen(lastOutputString, textInput);
+                    screen.PrintScreen(lastOutputString, mapString, textInput, mapToggle);
                     string? input = screen.GetNewCommand();
 
                     if (string.IsNullOrEmpty(input))
@@ -93,11 +85,11 @@ namespace WorldOfZuul
 
         private void Move(string direction)
         {
-            if (currentRoom?.Exits.ContainsKey(direction) == true)
+            if (map?.CurrentRoom?.Exits.ContainsKey(direction) == true)
             {
-                previousRoom = currentRoom;
-                currentRoom = currentRoom?.Exits[direction];
-                lastOutputString = $"{currentRoom?.LongDescription}\n";
+                previousRoom = map.CurrentRoom;
+                map.CurrentRoom = map.CurrentRoom.Exits[direction];
+                lastOutputString = $"{map?.CurrentRoom?.LongDescription}\n";
             }
             else
             {
@@ -110,15 +102,15 @@ namespace WorldOfZuul
             switch(command?.Name)
                 {
                     case "look":
-                        lastOutputString = $"{currentRoom?.LongDescription}\n";
+                        lastOutputString = $"{map?.CurrentRoom?.LongDescription}\n";
                         break;
 
                     case "back":
                         if (previousRoom == null)
                             lastOutputString = "You can't go back from here!";
                         else
-                            currentRoom = previousRoom;
-                            lastOutputString = $"{currentRoom?.LongDescription}\n";
+                            map.CurrentRoom = previousRoom;
+                            lastOutputString = $"{map?.CurrentRoom?.LongDescription}\n";
                         break;
 
                     case "north":
@@ -138,6 +130,15 @@ namespace WorldOfZuul
                     case "togglein":
                         textInput = !textInput;
                         break;
+                    case "minimap":
+                        mapToggle = !mapToggle;
+                        break;
+                    /*  UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
+                    case "build":
+                        lastOutputString = map.CreateBuilding("School", "Here Kids go to have 12 years of neverending fun!", (map.Rooms["recreationalArea1"], null, null, map.Rooms["ghetto"]));
+                        //lastOutputString += map.Rooms["School"].Exits["east"].ShortDescription;
+                        break;
+                    */
 
                     default:
                         // Console Write unnecessary because of earlier input evaluation, thus passed a debug note instead.

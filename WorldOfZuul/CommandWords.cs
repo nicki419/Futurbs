@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Security;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WorldOfZuul
 {
-    public class CommandWords
-    {
-
+    public class CommandWords {
         public enum CommandCategory {
             Movement,
             Actions,
@@ -46,11 +45,15 @@ namespace WorldOfZuul
             /* Actions */ new List<GameCommand>() {
                 new("look", "Investigate your sorroundings", CommandCategory.Actions, 'l'),
                 new("help", "Print Help", CommandCategory.Actions, 'h'),
+                new("build", "Creates a new Building.", CommandCategory.Actions, 'b'),
+                
             },
 
             /* Miscellaneous */ new List<GameCommand>() {
                 new("quit", "Exit the game", CommandCategory.Miscellaneous, null),
                 new("togglein", "Toggle between command input modes", CommandCategory.Miscellaneous, null),
+                // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT IN Game.cs -> CommandHandler
+                //new("minimap", "Toggles the mini map", CommandCategory.Miscellaneous, null),
             }
         };
 
