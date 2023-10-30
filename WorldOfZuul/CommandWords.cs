@@ -45,14 +45,14 @@ namespace WorldOfZuul
             /* Actions */ new List<GameCommand>() {
                 new("look", "Investigate your sorroundings", CommandCategory.Actions, 'l'),
                 new("help", "Print Help", CommandCategory.Actions, 'h'),
-                new("build", "Creates a new Building.", CommandCategory.Actions, 'b'),
+                // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT IN Game.cs -> CommandHandler
+                //new("build", "Creates a new Building.", CommandCategory.Actions, 'b'),
                 
             },
 
             /* Miscellaneous */ new List<GameCommand>() {
                 new("quit", "Exit the game", CommandCategory.Miscellaneous, null),
                 new("togglein", "Toggle between command input modes", CommandCategory.Miscellaneous, null),
-                // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT IN Game.cs -> CommandHandler
                 new("minimap", "Toggles the mini map", CommandCategory.Miscellaneous, null),
             }
         };
