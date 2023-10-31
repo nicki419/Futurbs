@@ -39,8 +39,7 @@ namespace WorldOfZuul
             screen.InitialiseScreen();
             compareRoom = map?.CurrentRoom;
 
-            while (continuePlaying)
-            {
+            while (continuePlaying) {
                 if(compareOutputString != lastOutputString) screen.DrawInfoText();
                 if(map?.CurrentRoom != compareRoom) screen.DrawMiniMap();
                 screen.DrawInputText();
@@ -101,7 +100,6 @@ namespace WorldOfZuul
                 Screen.CommandOutputString.Add($"You can't go {direction}!");
             }
         }
-
         public bool CommandHandler(Command? command) {
             switch(command?.Name)
                 {
