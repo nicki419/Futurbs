@@ -11,19 +11,19 @@ namespace WorldOfZuul
           //Creates a Dictionary of Rooms. Each room has a name a short description a long description and a boolean that shows the state of the room (null defaults to Built).
 
           public Dictionary<string, Room> Rooms  = new() {
-            {"cityCentre", new("City Centre","The city centre of Futurbs, the hustle and bustle of the town is loud and cheerful as if its the first day that you are visiting the town", null)},
-            {"townHall", new("Town Hall","The town hall, a place where you go daily to set up Futubs for a brighter future.", null)},
-            {"trainStation", new("Train Station","The train station of Futurbs where hundreds of people arrive back home, or leave to seek a better future.", null)},
-            {"park1", new("Park 1 ","The main park of Futurbs, althoug an old one it still has it's beuty in all seasons of the year.", null)},
-            {"market", new("Market","The market is as lively as ever with the comotion of pop-up stalls or passers through.", null)},
+            {"cityCentre", new("City Centre","The city centre of Futurbs, the hustle and bustle of the town is loud and cheerful, as if it's the first day you are visiting the city.", null)},
+            {"townHall", new("Town Hall","The town hall, a place where you go daily to set up Futurbs for a brighter future.", null)},
+            {"trainStation", new("Train Station","The train station of Futurbs, where daily, dozens of people arrive back home, or leave seeking a better future...", null)},
+            {"park1", new("Park 1 ","The main park of Futurbs, although an old one, it still shows its beauty in all seasons of the year.", null)},
+            {"market", new("Market","The market is as lively as ever with the commotion of pop-up stalls, and people passing through. Most lively chatter can be heard all aroud.", null)},
             {"residentialHouses", new("Residentail Houses","The residentail houses of Futurbs are a range between new and modern architecture and old rustic houses that have been there for decades.", null)},
-            {"recreationalArea1", new("Recreational Area 1","A residentail area near the houses with greenery and playgrounds for the local kids to enjoy.", null)},
-            {"residentialBlocks", new("Residentail Blocks","The old school comi-blocks are a sore sight to see. Although they fill the purpose of chap housing something must be done to better the quality of living.", null)},
-            {"park2", new("Park 2","The newer park in Futurbs is quite nice although many people ar debating between the charm and history of the onld park and the nwely built modern Park.", null)},
-            {"ghetto", new("Ghetto","The Ghetto is the last place you would want to end up in, the buildng are a ramshackle of materials put together just to have a roof, and the living conditions are as bad as it can come.", null)},
-            {"IndustrialZone", new("Industrial Zone","The industrial zone of Futurbs is filled with wearhouses, factorys, and manufactoring buildings that don't bode that well to the enviroment and wildlife of the area and beyond.", null)},
-            {"recreationalArea2", new("Recreational Area 2","A hub of all sports. Skateboarding, rollerblading, parkour and much more to be found at the newly installed recreational area.", null)},
-            {"mayorsOffice", new("Mayors Office","The Mayors Office, a place that you can whole heartedly call you second home, tis is where you make all the decidionds that impact the area and the denisens of Futurbs.", null)},
+            {"recreationalArea1", new("Recreational Area 1","A recreational area near the houses with greenery and playgrounds for kids to enjoy.", null)},
+            {"residentialBlocks", new("Residentail Blocks","The old-school commieblocks are a sore sight to behold. Although they fulfil the purpose of cheap housing, something must be done quickly to better the quality of living.", null)},
+            {"park2", new("Park 2","The newer park in Futurbs is quite nice, although many people are debating between the charm and history of the old park as opposed to the newly built, modern Park.", null)},
+            {"ghetto", new("Ghetto","The Ghetto is the last place you would want to end up in; the buildngs are a ramshackle of materials put together just to have a roof, and the living conditions are as bad as they can come.", null)},
+            {"IndustrialZone", new("Industrial Zone","The industrial zone of Futurbs is filled with warehouses, factories, and manufactoring plants that don't bode that well to the enviroment and wildlife of the area, and even beyond.", null)},
+            {"recreationalArea2", new("Recreational Area 2","A hub of all sorts. Skateboarding, rollerblading, parkour and much more can be found at the recently installed recreational area.", null)},
+            {"mayorsOffice", new("Mayors Office","The Mayors Office, a place that you can whole-heartedly call your second home. This is where you make all the decidionds that impact the citizens of Futurbs, and the city itself.", null)},
         };
         // Instead of a function CreateMap(), use the class's initialisor to set the exits.
         public Map() {
@@ -49,11 +49,11 @@ namespace WorldOfZuul
         public string MiniMap()
         {
           string returnString = ""; 
-          returnString += $" -= {CurrentRoom.ShortDescription} =-\n";
-          if(CurrentRoom.Exits.ContainsKey("north")) returnString += $"North - {CurrentRoom.Exits["north"].ShortDescription}\n"; else returnString +=$"North - \n";
-          if(CurrentRoom.Exits.ContainsKey("east")) returnString += $"East  - {CurrentRoom.Exits["east"].ShortDescription}\n";else returnString += $"East  - \n" ;
-          if(CurrentRoom.Exits.ContainsKey("south")) returnString += $"South - {CurrentRoom.Exits["south"].ShortDescription}\n"; else returnString += $"South - \n";
-          if(CurrentRoom.Exits.ContainsKey("west")) returnString += $"West  - {CurrentRoom.Exits["west"].ShortDescription}\n"; else returnString += $"West  - \n";
+          returnString += $"{CurrentRoom.ShortDescription}\n";
+          if(CurrentRoom.Exits.ContainsKey("north")) returnString += $"N: {CurrentRoom.Exits["north"].ShortDescription}\n"; else returnString +=$"N: -----\n";
+          if(CurrentRoom.Exits.ContainsKey("east")) returnString += $"E: {CurrentRoom.Exits["east"].ShortDescription}\n";else returnString += $"E: -----\n" ;
+          if(CurrentRoom.Exits.ContainsKey("south")) returnString += $"S: {CurrentRoom.Exits["south"].ShortDescription}\n"; else returnString += $"S: -----\n";
+          if(CurrentRoom.Exits.ContainsKey("west")) returnString += $"W: {CurrentRoom.Exits["west"].ShortDescription}\n"; else returnString += $"W: -----\n";
           returnString += "\n";
           return returnString;          
         }   

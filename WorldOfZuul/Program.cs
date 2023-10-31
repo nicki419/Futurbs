@@ -80,9 +80,9 @@ namespace WorldOfZuul
 {
     public class Program
     {
+        public static Game game = new();
         public static void Main()
         {
-            Game game = new();
             game.Play();
         }
     }
