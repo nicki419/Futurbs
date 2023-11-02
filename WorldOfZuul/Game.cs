@@ -34,7 +34,8 @@ namespace WorldOfZuul
             Parser parser = new();
 
             bool continuePlaying = true;
-            lastOutputString = $"Welcome to the Futurbs!\nWorld of Zuul is a new, incredibly not-boring adventure game.\n\n{map?.CurrentRoom?.LongDescription}\n";
+            lastOutputString = $"Welcome to Futurbs!\nFuturbs is a new, incredibly not-boring adventure game.\n\n{map?.CurrentRoom?.LongDescription}\n";
+            PrintHelp(null);
 
             screen.InitialiseScreen();
             compareRoom = map?.CurrentRoom;
@@ -60,7 +61,7 @@ namespace WorldOfZuul
 
                     if (command == null)
                     {
-                        Screen.CommandOutputString.Add($"I don't know that command.");
+                        Screen.CommandOutputString.Add($"Invalid command.");
                         Screen.CommandOutputString.Add($"> {input}");
                         continue;
                     }
@@ -142,7 +143,7 @@ namespace WorldOfZuul
                         Screen.CommandOutputString.Add($"> {input}");
                         textInput = !textInput;
                         break;
-                    /*  UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
+                    /* // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
                     case "build":
                         lastOutputString = map.CreateBuilding("School", "Here Kids go to have 12 years of neverending fun!", (map.Rooms["recreationalArea1"], null, null, map.Rooms["ghetto"]));
                         //lastOutputString += map.Rooms["School"].Exits["east"].ShortDescription;
@@ -177,7 +178,6 @@ namespace WorldOfZuul
                 }
                 Screen.CommandOutputString.Add($"{arg} is not a valid command. Cannot print help");
             }
-            
         }
     }
 }

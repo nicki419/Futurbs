@@ -46,7 +46,7 @@ namespace WorldOfZuul
                 new("look", "Investigate your sorroundings", CommandCategory.Actions, 'l'),
                 new("help", "Print Help", CommandCategory.Actions, 'h'),
                 // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT IN Game.cs -> CommandHandler
-                // new("build", "Creates a new Building.", CommandCategory.Actions, 'b'),
+                //new("build", "Creates a new Building.", CommandCategory.Actions, 'b'),
                 
             },
 
