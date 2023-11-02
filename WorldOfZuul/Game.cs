@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace WorldOfZuul
 {
@@ -7,21 +8,23 @@ namespace WorldOfZuul
     {
         //private Room? map?.CurrentRoom;
         private Room? previousRoom;
+        private Room? compareRoom;
 
         // Don't forget to create a new object
-        private Map map = new();
+        public Map map = new();
 
-        private readonly Screen screen = new();
+        public readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
-        private bool textInput = true;
-        private bool mapToggle = false;
-        private string? lastOutputString;
-        private string? mapString;
+        public bool textInput = true;
+        public string lastOutputString = "";
+        public string compareOutputString = "";
+        public int ScrollingTextSleepDuration = 0;
+        private string? input;
 
 
         public Game()
         {
-            
+
         }
 
 
@@ -30,27 +33,27 @@ namespace WorldOfZuul
             
             Parser parser = new();
 
-            //map.CurrentRoom = map.cityCentre;
-            
-
             bool continuePlaying = true;
-            lastOutputString = $"Welcome to the World of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\n\n{map?.CurrentRoom?.LongDescription}\n";
+            lastOutputString = $"Welcome to Futurbs!\nFuturbs is a new, incredibly not-boring adventure game.\n\n{map?.CurrentRoom?.LongDescription}\n";
+            PrintHelp(null);
 
-            while (continuePlaying)
-            {
-                if(mapToggle) mapString = map?.MiniMap();
-                else mapString = null;
-                
+            screen.InitialiseScreen();
+            compareRoom = map?.CurrentRoom;
+
+            while (continuePlaying) {
+                if(compareOutputString != lastOutputString) screen.DrawInfoText();
+                if(map?.CurrentRoom != compareRoom) screen.DrawMiniMap();
+                screen.DrawInputText();
                 // If input type is text input
                 if(textInput == true) {
-                    screen.PrintScreen(lastOutputString, mapString, textInput, mapToggle);
 
-                    string? input = Console.ReadLine()?.ToLower();
+                    input = Console.ReadLine()?.ToLower();
                     //string? input = "north";
 
                     if (string.IsNullOrEmpty(input))
                     {
-                        lastOutputString = $"Please enter a command.";
+                        Screen.CommandOutputString.Add($"Please enter a command.");
+                        Screen.CommandOutputString.Add($"> {input}");
                         continue;
                     }
 
@@ -58,7 +61,8 @@ namespace WorldOfZuul
 
                     if (command == null)
                     {
-                        lastOutputString = $"I don't know that command.";
+                        Screen.CommandOutputString.Add($"Invalid command.");
+                        Screen.CommandOutputString.Add($"> {input}");
                         continue;
                     }
 
@@ -66,9 +70,7 @@ namespace WorldOfZuul
                 } 
                 // If input type is the menu navigation
                 else {
-                    
-                    screen.PrintScreen(lastOutputString, mapString, textInput, mapToggle);
-                    string? input = screen.GetNewCommand();
+                    input = screen.GetNewCommand();
 
                     if (string.IsNullOrEmpty(input))
                     {
@@ -80,7 +82,10 @@ namespace WorldOfZuul
                 }
             }
 
-            Console.WriteLine("Thank you for playing World of Zuul!");
+            Console.Clear();
+            Console.SetCursorPosition(1,1);
+            Console.CursorVisible = true;
+            Console.WriteLine("Thank you for playing Futurbs!");
         }
 
         private void Move(string direction)
@@ -93,30 +98,36 @@ namespace WorldOfZuul
             }
             else
             {
-                lastOutputString = $"You can't go {direction}!";
+                Screen.CommandOutputString.Add($"You can't go {direction}!");
             }
         }
-
         public bool CommandHandler(Command? command) {
-
             switch(command?.Name)
                 {
                     case "look":
                         lastOutputString = $"{map?.CurrentRoom?.LongDescription}\n";
+                        Screen.CommandOutputString.Add($"> {input}");
+                        //Screen.CommandOutputString.Add($"{map?.CurrentRoom?.LongDescription}");
                         break;
 
                     case "back":
-                        if (previousRoom == null)
-                            lastOutputString = "You can't go back from here!";
-                        else
+                        if (previousRoom == null) {
+                            Screen.CommandOutputString.Add($"> {input}");
+                            Screen.CommandOutputString.Add("You can't go back from here!");
+                        }
+                        else {
                             map.CurrentRoom = previousRoom;
                             lastOutputString = $"{map?.CurrentRoom?.LongDescription}\n";
+                            Screen.CommandOutputString.Add($"> {input}");
+                            Screen.CommandOutputString.Add($"{map?.CurrentRoom?.LongDescription}");
+                        }
                         break;
 
                     case "north":
                     case "south":
                     case "east":
                     case "west":
+                        Screen.CommandOutputString.Add($"> {input}");
                         Move(command.Name);
                         break;
 
@@ -125,15 +136,14 @@ namespace WorldOfZuul
                         //break;
 
                     case "help":
-                        lastOutputString = PrintHelp();
+                        Screen.CommandOutputString.Add($"> {input}");
+                        PrintHelp(command.SecondWord);
                         break;
                     case "togglein":
+                        Screen.CommandOutputString.Add($"> {input}");
                         textInput = !textInput;
                         break;
-                    case "minimap":
-                        mapToggle = !mapToggle;
-                        break;
-                    /*  UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
+                    /* // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
                     case "build":
                         lastOutputString = map.CreateBuilding("School", "Here Kids go to have 12 years of neverending fun!", (map.Rooms["recreationalArea1"], null, null, map.Rooms["ghetto"]));
                         //lastOutputString += map.Rooms["School"].Exits["east"].ShortDescription;
@@ -147,15 +157,27 @@ namespace WorldOfZuul
                 }
                 return true;
         }
-        private static string PrintHelp()
+        private static void PrintHelp(string? arg)
         {
-            return @"Navigate by typing 'north', 'south', 'east', or 'west'.
-'look'      - print more details about the current room.
-'back'      - go to the previous room.
-'help'      - print this message again.
-'toggleIn'  - toggle input mode between text and menu navigation.
-'quit'      - exit the game.
-            ";
+            if(arg == null && Program.game.textInput) {
+                Screen.CommandOutputString.Add($"Navigate by typing 'north', 'south', 'east', or 'west'.");
+                Screen.CommandOutputString.Add("Type 'look' to get more details about a room."); 
+                Screen.CommandOutputString.Add("For more help on a specific command, type in 'help' followed by the command name.");
+            }
+            else if(arg == null && !Program.game.textInput) {
+                Program.game.lastOutputString = "Navigate through the menu by using the arrow Keys.\nPress [Enter] to select a command.\nTo get help with specific commands, please use text input mode.";
+            }
+            else {
+                foreach(List<CommandWords.GameCommand> i in CommandWords.commandList) {
+                    foreach(CommandWords.GameCommand j in i) {
+                        if(j.Name == arg) {
+                            Screen.CommandOutputString.Add(j.HelpText);
+                            return;
+                        }
+                    }
+                }
+                Screen.CommandOutputString.Add($"{arg} is not a valid command. Cannot print help");
+            }
         }
     }
 }

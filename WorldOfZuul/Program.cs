@@ -80,9 +80,16 @@ namespace WorldOfZuul
 {
     public class Program
     {
+        public static Game game = new();
         public static void Main()
         {
-            Game game = new();
+            Console.CancelKeyPress += delegate {
+                Console.Clear();
+                Console.CursorVisible = true;
+                Console.SetCursorPosition(0, 0);
+                Console.WriteLine("Keyboard Interrupt");
+                // call methods to clean up
+            };
             game.Play();
         }
     }
