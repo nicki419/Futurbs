@@ -38,17 +38,15 @@ namespace WorldOfZuul
             PrintHelp(null);
 
             screen.InitialiseScreen();
-            compareRoom = map?.CurrentRoom;
 
             while (continuePlaying) {
                 if(compareOutputString != lastOutputString) screen.DrawInfoText();
-                if(map?.CurrentRoom != compareRoom) screen.DrawMiniMap();
+                screen.DrawMiniMap();
                 screen.DrawInputText();
                 // If input type is text input
                 if(textInput == true) {
 
-                    input = Console.ReadLine()?.ToLower();
-                    //string? input = "north";
+                    input = screen.ReadLine()?.ToLower();
 
                     if (string.IsNullOrEmpty(input))
                     {
