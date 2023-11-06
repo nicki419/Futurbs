@@ -149,6 +149,34 @@ namespace WorldOfZuul
                         //lastOutputString += map.Rooms["School"].Exits["east"].ShortDescription;
                         break;
                     */
+                    case "textspeed":
+                        Screen.CommandOutputString.Add($"> {input}");
+                        Program.game.lastOutputString = "Toggle between text scrolling speed: 'fast', 'medium', 'slow', 'instant'";
+                        break;
+
+                    case "fast":
+                        Program.game.lastOutputString = "Text scrolling speed changed to fast";
+                        Screen.CommandOutputString.Add($"> {input}");
+                        ScrollingTextSleepDuration = 5;
+                        break;
+
+                    case "medium":
+                        Program.game.lastOutputString = "Text scrolling speed changed to medium";
+                        Screen.CommandOutputString.Add($"> {input}");
+                        ScrollingTextSleepDuration = 20;
+                        break;
+
+                    case "slow":
+                        Program.game.lastOutputString = "Text scrolling speed changed to slow";
+                        Screen.CommandOutputString.Add($"> {input}");
+                        ScrollingTextSleepDuration = 100;
+                        break;
+
+                    case "instant":
+                        Program.game.lastOutputString = "Text scrolling speed changed to instant";
+                        Screen.CommandOutputString.Add($"> {input}");
+                        ScrollingTextSleepDuration = 0;
+                        break;
 
                     default:
                         // Console Write unnecessary because of earlier input evaluation, thus passed a debug note instead.
@@ -157,6 +185,29 @@ namespace WorldOfZuul
                 }
                 return true;
         }
+
+        /*private void ScrollingText()
+        {
+            input = Console.ReadLine()?.ToLower();
+            if(input == "fast")
+            {
+                ScrollingTextSleepDuration = 5;
+            }
+            if(input == "medium")
+            {
+                ScrollingTextSleepDuration = 20;
+            }
+            if(input == "slow")
+            {
+                ScrollingTextSleepDuration = 100;
+            }
+            if(input == "instant")
+            {
+                ScrollingTextSleepDuration = 0;
+            }
+                
+        }*/
+
         private static void PrintHelp(string? arg)
         {
             if(arg == null && Program.game.textInput) {
