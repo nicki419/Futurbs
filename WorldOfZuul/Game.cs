@@ -35,7 +35,7 @@ namespace WorldOfZuul
 
             bool continuePlaying = true;
             lastOutputString = $"Welcome to Futurbs!\nFuturbs is a new, incredibly not-boring adventure game.\n\n{map?.CurrentRoom?.LongDescription}\n";
-            PrintHelp(null);
+            //PrintHelp(null);
 
             screen.InitialiseScreen();
             compareRoom = map?.CurrentRoom;
@@ -159,14 +159,32 @@ namespace WorldOfZuul
         }
         private static void PrintHelp(string? arg)
         {
-            if(arg == null && Program.game.textInput) {
-                Screen.CommandOutputString.Add($"Navigate by typing 'north', 'south', 'east', or 'west'.");
-                Screen.CommandOutputString.Add("Type 'look' to get more details about a room."); 
-                Screen.CommandOutputString.Add("For more help on a specific command, type in 'help' followed by the command name.");
+            //List<string> helpStr = new();
+            if(arg == null && !Program.game.textInput) {
+                Program.game.lastOutputString = $"For Movement:\n  [north], [east], [south], [west].\n  To go back to the previous room use [back].\nFor Actions:\n  To get more information about a room use [look]\n  To exit the game use [quit].";   
             }
-            else if(arg == null && !Program.game.textInput) {
-                Program.game.lastOutputString = "Navigate through the menu by using the arrow Keys.\nPress [Enter] to select a command.\nTo get help with specific commands, please use text input mode.";
-            }
+            else if(arg == null && Program.game.textInput) {
+                string helpString = "";
+                for(int i = 0; i < 3; ++i) {
+                    switch(i) {
+                        case 0:
+                            helpString += "Movement: ";
+                            break;
+                        case 1:
+                            helpString += "Actions: ";
+                            break;
+                        case 2:
+                            helpString += "Miscellaneous: ";
+                            break;
+                    }
+                    foreach(CommandWords.GameCommand j in CommandWords.commandList[i]) helpString += $"{j.Name}, ";
+                    helpString = helpString.Remove(helpString.Length - 2, 2);
+                    helpString += "\n";
+                }
+                helpString = helpString.Remove(helpString.Length - 1, 1);
+                Program.game.lastOutputString = helpString;
+                Screen.CommandOutputString.Add("To get help with a specific command, type help + [command name].");
+            }   
             else {
                 foreach(List<CommandWords.GameCommand> i in CommandWords.commandList) {
                     foreach(CommandWords.GameCommand j in i) {
