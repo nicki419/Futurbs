@@ -151,31 +151,7 @@ namespace WorldOfZuul
                     */
                     case "textspeed":
                         Screen.CommandOutputString.Add($"> {input}");
-                        Program.game.lastOutputString = "Toggle between text scrolling speed: 'fast', 'medium', 'slow', 'instant'";
-                        break;
-
-                    case "fast":
-                        Program.game.lastOutputString = "Text scrolling speed changed to fast";
-                        Screen.CommandOutputString.Add($"> {input}");
-                        ScrollingTextSleepDuration = 5;
-                        break;
-
-                    case "medium":
-                        Program.game.lastOutputString = "Text scrolling speed changed to medium";
-                        Screen.CommandOutputString.Add($"> {input}");
-                        ScrollingTextSleepDuration = 20;
-                        break;
-
-                    case "slow":
-                        Program.game.lastOutputString = "Text scrolling speed changed to slow";
-                        Screen.CommandOutputString.Add($"> {input}");
-                        ScrollingTextSleepDuration = 100;
-                        break;
-
-                    case "instant":
-                        Program.game.lastOutputString = "Text scrolling speed changed to instant";
-                        Screen.CommandOutputString.Add($"> {input}");
-                        ScrollingTextSleepDuration = 0;
+                        ScrollingText(command?.SecondWord);
                         break;
 
                     default:
@@ -186,27 +162,61 @@ namespace WorldOfZuul
                 return true;
         }
 
-        /*private void ScrollingText()
-        {
-            input = Console.ReadLine()?.ToLower();
-            if(input == "fast")
-            {
-                ScrollingTextSleepDuration = 5;
+        private void ScrollingText(string? args) {
+            string outputString = "";
+
+            switch(args) {
+                case "instant":
+                    outputString = "Text scrolling speed changed to 'instant'.";
+                    //Screen.CommandOutputString.Add($"> {input}");
+                    ScrollingTextSleepDuration = 0;
+                    break;
+
+                case "fast":
+                    outputString = "Text scrolling speed changed to 'fast'.";
+                    //Screen.CommandOutputString.Add($"> {input}");
+                    ScrollingTextSleepDuration = 5;
+                    break;
+
+                case "medium":
+                    outputString = "Text scrolling speed changed to 'medium'.";
+                    //Screen.CommandOutputString.Add($"> {input}");
+                    ScrollingTextSleepDuration = 20;
+                    break;
+
+                case "slow":
+                    outputString = "Text scrolling speed changed to 'slow'.";
+                    //Screen.CommandOutputString.Add($"> {input}");
+                    ScrollingTextSleepDuration = 100;
+                    break;
+                default:
+                    if(args != "") {
+                        if(ScrollingTextSleepDuration == 0) {
+                            ScrollingTextSleepDuration = 5;
+                            outputString = "Text scrolling speed changed to 'fast'.";
+                        }
+                        else if(ScrollingTextSleepDuration == 5) {
+                            ScrollingTextSleepDuration = 20;
+                            outputString = "Text scrolling speed changed to 'medium'.";
+                        }
+                        else if(ScrollingTextSleepDuration == 20) {
+                            ScrollingTextSleepDuration = 100;
+                            outputString = "Text scrolling speed changed to 'slow'.";
+                        }
+                        else {
+                            ScrollingTextSleepDuration = 0;
+                            outputString = "Text scrolling speed changed to 'instant'.";
+                        }
+                    } 
+                    else {
+                        outputString = $"Unknown argument '{args}'. Toggle between modes by specifying no argument, or use 'instant', 'fast', 'medium', or 'slow' to specify a scrolling speed.";
+                    }
+                    break;
+                }
+
+                if(Program.game.textInput) Screen.CommandOutputString.Add(outputString);
+                else lastOutputString = outputString;
             }
-            if(input == "medium")
-            {
-                ScrollingTextSleepDuration = 20;
-            }
-            if(input == "slow")
-            {
-                ScrollingTextSleepDuration = 100;
-            }
-            if(input == "instant")
-            {
-                ScrollingTextSleepDuration = 0;
-            }
-                
-        }*/
 
         private static void PrintHelp(string? arg)
         {
