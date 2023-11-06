@@ -15,4 +15,4 @@ Refer to `CommandWords.cs.md` for a list of valid commands.
 ---
 
 ### SecondWord
-Not yet implemented; SecondWord allows to give a command extra context, e.g. `"take apple"`.
+SecondWord allows to give a command extra context, e.g. `"help north"`.

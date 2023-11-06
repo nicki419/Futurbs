@@ -3,11 +3,8 @@ This is the documentation for `WorldOfZuul/CommandWords.cs`.
 
 ---
 
-### ValidCommands
-ValidCommands is a list of all valid commands:
-```csharp
-{ "north", "east", "south", "west", "look", "back", "quit" }
-```
+### commandList
+commandList is a list of lists of all valid commands. It is divided into categories.
 
 ---
 
