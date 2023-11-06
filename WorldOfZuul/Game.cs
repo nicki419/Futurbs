@@ -160,9 +160,7 @@ namespace WorldOfZuul
         private static void PrintHelp(string? arg)
         {
             //List<string> helpStr = new();
-            if(arg == null && !Program.game.textInput) {
-                Program.game.lastOutputString = $"For Movement:\n  [north], [east], [south], [west].\n  To go back to the previous room use [back].\nFor Actions:\n  To get more information about a room use [look]\n  To exit the game use [quit].";   
-            }
+            if(arg == null && !Program.game.textInput) Program.game.lastOutputString = "Navigate through the menu by using the arrow Keys.\nPress [Enter] to select a command.\nTo get help with specific commands, please use text input mode.";   
             else if(arg == null && Program.game.textInput) {
                 string helpString = "";
                 for(int i = 0; i < 3; ++i) {
