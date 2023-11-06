@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Figgle;
 using System.Text.RegularExpressions;
 using System.Runtime.Serialization.Formatters;
+using System.Xml;
 
 namespace WorldOfZuul {
     public class Screen {
@@ -261,6 +262,37 @@ namespace WorldOfZuul {
             DrawMiniMap();
             DrawInfoText();
             DrawInputText();
+        }
+
+        public string? ReadLine() {
+            string? output = "";
+            while(true) {
+                ConsoleKey inputKey = Console.ReadKey().Key;
+
+                if(inputKey == ConsoleKey.Backspace) {
+                    // nested if needed to trigger above condition on all backspace presses. Otherwise will add "Backspace" 
+                    // to string and continue to remove characters afterwards, going off screen.
+                    if(output.Length > 0) {
+                        output = output.Remove(output.Length - 1, 1); 
+                        Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                        Console.Write(' ');
+                        Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                    }
+                }
+                else if(inputKey == ConsoleKey.Enter) {
+                    if(output.Length == 0) return null;
+                    else return output;
+                }
+                else if(new Regex("^[a-zA-Z]+$").IsMatch(inputKey.ToString()) && Console.GetCursorPosition().Left < 74) {
+                    output += inputKey.ToString();
+                    //Console.Write(inputKey.ToString());
+                }
+                else if(Console.GetCursorPosition().Left == 74) {
+                    Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                    Console.Write(' ');
+                    Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                }
+            }
         }
         public string? GetNewCommand(){
             CommandWords.GameCommand selectedCommand;
