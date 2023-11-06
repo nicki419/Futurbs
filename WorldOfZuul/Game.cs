@@ -8,7 +8,6 @@ namespace WorldOfZuul
     {
         //private Room? map?.CurrentRoom;
         private Room? previousRoom;
-        private Room? compareRoom;
 
         // Don't forget to create a new object
         public Map map = new();
@@ -18,7 +17,7 @@ namespace WorldOfZuul
         public bool textInput = true;
         public string lastOutputString = "";
         public string compareOutputString = "";
-        public int ScrollingTextSleepDuration = 0;
+        public int ScrollingTextSleepDuration = 20;
         private string? input;
 
 

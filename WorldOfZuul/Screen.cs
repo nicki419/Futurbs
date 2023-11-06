@@ -14,7 +14,7 @@ namespace WorldOfZuul {
         public (int, int) NamecardDimensions = (98, 7);
         public (int, int, int) TopBoxDimensions = (73, 25, 7);
         public (int, int, int) BottomBoxDimensions = (73, 25, 8);
-        public static List<string> CommandOutputString = new() {""};
+        public static List<string> CommandOutputString = new() {"", "Type 'north', 'east', 'south', or 'west' to move. To print more available commands, type 'help'."};
 
         // https://en.wikipedia.org/wiki/Box-drawing_character
         public List<char> BoxCharacters = new() {
@@ -283,10 +283,12 @@ namespace WorldOfZuul {
                     if(output.Length == 0) return null;
                     else return output;
                 }
+                else if(inputKey == ConsoleKey.Spacebar) output += " ";
                 else if(new Regex("^[a-zA-Z]+$").IsMatch(inputKey.ToString()) && Console.GetCursorPosition().Left < 74) {
                     output += inputKey.ToString();
                     //Console.Write(inputKey.ToString());
                 }
+
                 else if(Console.GetCursorPosition().Left == 74) {
                     Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
                     Console.Write(' ');
