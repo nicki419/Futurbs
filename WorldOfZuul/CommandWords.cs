@@ -53,6 +53,8 @@ namespace WorldOfZuul
             /* Miscellaneous */ new List<GameCommand>() {
                 new("quit", "Exit the game", CommandCategory.Miscellaneous, null),
                 new("togglein", "Toggle between command input modes", CommandCategory.Miscellaneous, null),
+                new("textspeed", "Sets/toggles text scrolling speed: 'instant', 'fast', 'medium', 'slow'.", CommandCategory.Miscellaneous, null),
+                
             }
         };
 
