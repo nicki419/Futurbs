@@ -267,7 +267,7 @@ namespace WorldOfZuul {
         public string? ReadLine() {
             string? output = "";
             while(true) {
-                ConsoleKey inputKey = Console.ReadKey().Key;
+                ConsoleKey inputKey = Console.ReadKey(true).Key;
 
                 if(inputKey == ConsoleKey.Backspace) {
                     // nested if needed to trigger above condition on all backspace presses. Otherwise will add "Backspace" 
@@ -283,9 +283,13 @@ namespace WorldOfZuul {
                     if(output.Length == 0) return null;
                     else return output;
                 }
-                else if(inputKey == ConsoleKey.Spacebar) output += " ";
+                else if(inputKey == ConsoleKey.Spacebar) {
+                    output += " ";
+                    Console.Write(' ');
+                }
                 else if(new Regex("^[a-zA-Z]+$").IsMatch(inputKey.ToString()) && Console.GetCursorPosition().Left < 74) {
                     output += inputKey.ToString();
+                    Console.Write(inputKey.ToString().ToLower());
                     //Console.Write(inputKey.ToString());
                 }
 
