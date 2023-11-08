@@ -19,9 +19,13 @@ namespace WorldOfZuul
                 return null;
             }
 
-            if (words.Length > 1)
+            if (words.Length >= 1)
             {
-                return new Command(words[0], words[1]);
+                List<string> secondWord = new();
+                foreach(string _ in words) secondWord.Add(_);
+                secondWord.RemoveAt(0);
+                string[] secondWordArray = secondWord.ToArray();
+                return new Command(words[0], secondWordArray);
             }
 
             return new Command(words[0]);

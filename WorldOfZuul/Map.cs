@@ -14,32 +14,33 @@ namespace WorldOfZuul
             {"cityCentre", new("City Centre","The city centre of Futurbs, the hustle and bustle of the town is loud and cheerful, as if it's the first day you are visiting the city.", null)},
             {"townHall", new("Town Hall","The town hall, a place where you go daily to set up Futurbs for a brighter future.", null)},
             {"trainStation", new("Train Station","The train station of Futurbs, where daily, dozens of people arrive back home, or leave seeking a better future...", null)},
-            {"park1", new("Park 1 ","The main park of Futurbs, although an old one, it still shows its beauty in all seasons of the year.", null)},
+            {"park1", new("Park 1","The main park of Futurbs, although an old one, it still shows its beauty in all seasons of the year.", null)},
             {"market", new("Market","The market is as lively as ever with the commotion of pop-up stalls, and people passing through. Most lively chatter can be heard all aroud.", null)},
-            {"residentialHouses", new("Residentail Houses","The residentail houses of Futurbs are a range between new and modern architecture and old rustic houses that have been there for decades.", null)},
+            {"residentialHouses", new("Residential Houses","The residentail houses of Futurbs are a range between new and modern architecture and old rustic houses that have been there for decades.", null)},
             {"recreationalArea1", new("Recreational Area 1","A recreational area near the houses with greenery and playgrounds for kids to enjoy.", null)},
-            {"residentialBlocks", new("Residentail Blocks","The old-school commieblocks are a sore sight to behold. Although they fulfil the purpose of cheap housing, something must be done quickly to better the quality of living.", null)},
+            {"residentialBlocks", new("Residential Blocks","The old-school commieblocks are a sore sight to behold. Although they fulfil the purpose of cheap housing, something must be done quickly to better the quality of living.", null)},
             {"park2", new("Park 2","The newer park in Futurbs is quite nice, although many people are debating between the charm and history of the old park as opposed to the newly built, modern Park.", null)},
             {"ghetto", new("Ghetto","The Ghetto is the last place you would want to end up in; the buildngs are a ramshackle of materials put together just to have a roof, and the living conditions are as bad as they can come.", null)},
             {"IndustrialZone", new("Industrial Zone","The industrial zone of Futurbs is filled with warehouses, factories, and manufactoring plants that don't bode that well to the enviroment and wildlife of the area, and even beyond.", null)},
             {"recreationalArea2", new("Recreational Area 2","A hub of all sorts. Skateboarding, rollerblading, parkour and much more can be found at the recently installed recreational area.", null)},
-            {"mayorsOffice", new("Mayors Office","The Mayors Office, a place that you can whole-heartedly call your second home. This is where you make all the decidionds that impact the citizens of Futurbs, and the city itself.", null)},
+            {"mayorsOffice", new("Mayor's Office","The Mayor's Office, a place that you can whole-heartedly call your second home. This is where you make all the decidionds that impact the citizens of Futurbs, and the city itself.", null)},
         };
         // Instead of a function CreateMap(), use the class's initialisor to set the exits.
-        public Map() {
-          Rooms["cityCentre"].SetExits(Rooms["townHall"], Rooms["market"], Rooms["trainStation"], Rooms["park1"]);
-          Rooms["market"].SetExits(Rooms["residentialHouses"], Rooms["recreationalArea1"], null, Rooms["cityCentre"] );
-          Rooms["residentialHouses"].SetExit("south", Rooms["market"]);
-          Rooms["recreationalArea1"].SetExit("west", Rooms["market"]);
-          Rooms["townHall"].SetExits(Rooms["mayorsOffice"], null, Rooms["cityCentre"], null);
-          Rooms["mayorsOffice"].SetExit("south", Rooms["townHall"]);
-          Rooms["park1"].SetExits(null, Rooms["cityCentre"], null, Rooms["residentialBlocks"]);
-          Rooms["residentialBlocks"].SetExits(Rooms["IndustrialZone"], Rooms["park1"], null, null);
-          Rooms["IndustrialZone"].SetExits(Rooms["recreationalArea2"], null, Rooms["residentialBlocks"], null);
-          Rooms["recreationalArea2"].SetExit("south", Rooms["IndustrialZone"]);
-          Rooms["trainStation"].SetExits(Rooms["cityCentre"], Rooms["ghetto"], Rooms["park2"], null);
-          Rooms["ghetto"].SetExit("west", Rooms["trainStation"]);
-          Rooms["park2"].SetExits(Rooms["trainStation"], null, null, null);
+        public Map(string[] roomNames) {
+
+          if(roomNames.Contains("cityCentre")) Rooms["cityCentre"].SetExits(Rooms["townHall"], Rooms["market"], Rooms["trainStation"], Rooms["park1"]);
+          if(roomNames.Contains("residentialHouses")) Rooms["residentialHouses"].SetExit("south", Rooms["market"]);
+          if(roomNames.Contains("recreationalArea1")) Rooms["recreationalArea1"].SetExit("west", Rooms["market"]);
+          if(roomNames.Contains("townHall")) Rooms["townHall"].SetExits(Rooms["mayorsOffice"], null, Rooms["cityCentre"], null);
+          if(roomNames.Contains("mayorsOffice")) Rooms["mayorsOffice"].SetExit("south", Rooms["townHall"]);
+          if(roomNames.Contains("park1")) Rooms["park1"].SetExits(null, Rooms["cityCentre"], null, Rooms["residentialBlocks"]);
+          if(roomNames.Contains("residentialBlocks")) Rooms["residentialBlocks"].SetExits(Rooms["IndustrialZone"], Rooms["park1"], null, null);
+          if(roomNames.Contains("IndustrialZone")) Rooms["IndustrialZone"].SetExits(Rooms["recreationalArea2"], null, Rooms["residentialBlocks"], null);
+          if(roomNames.Contains("recreationalArea2")) Rooms["recreationalArea2"].SetExit("south", Rooms["IndustrialZone"]);
+          if(roomNames.Contains("trainStation")) Rooms["trainStation"].SetExits(Rooms["cityCentre"], Rooms["ghetto"], Rooms["park2"], null);
+          if(roomNames.Contains("ghetto")) Rooms["ghetto"].SetExit("west", Rooms["trainStation"]);
+          if(roomNames.Contains("park2")) Rooms["park2"].SetExits(Rooms["trainStation"], null, null, null);
+          if(roomNames.Contains("market")) Rooms["market"].SetExits(Rooms["residentialHouses"], Rooms["recreationalArea1"], null, Rooms["cityCentre"] );
 
           CurrentRoom = Rooms["cityCentre"];
         

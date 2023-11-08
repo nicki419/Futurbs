@@ -45,6 +45,8 @@ namespace WorldOfZuul
             /* Actions */ new List<GameCommand>() {
                 new("look", "Investigate your surroundings", CommandCategory.Actions, 'l'),
                 new("help", "Print Help", CommandCategory.Actions, 'h'),
+                new("talk", "Talk to an NPC, if they're about.", CommandCategory.Actions, null),
+                new("quests", "View your quests and their progress. To track/untrack a quest: quests (un)track [id]. To get help with a quest: quests help [id].", CommandCategory.Actions, null),
                 // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT IN Game.cs -> CommandHandler
                 //new("build", "Creates a new Building.", CommandCategory.Actions, 'b'),
                 
