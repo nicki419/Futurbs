@@ -87,7 +87,7 @@ namespace WorldOfZuul
 
             public static void InitialiseState() {
                 Game.currentQuests = new();
-                Game.TrackedQuests = new();
+                //Game.TrackedQuests = new();
                 //foreach(int _ in Game.currentQuests.Keys) Game.currentQuests.Remove(_);
 
                 int questCounter = 1;
