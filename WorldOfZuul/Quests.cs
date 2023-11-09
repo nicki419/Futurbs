@@ -17,6 +17,7 @@ namespace WorldOfZuul
             stageProgress
         };
         public class Quest {
+            private bool IsNew;
             public float Id; //e.g. 0.1 for stage 0, quest 1
             public string Name;
             public string HelpText;
@@ -25,7 +26,8 @@ namespace WorldOfZuul
             public string? CompletionCondition;
             public Dictionary<int, Quest>? SubQuests;
 
-            public Quest(float id, string name, string helpText, string? completionCondition, Dictionary<int, Quest>? subQuests, Quests.QuestType? type = Quests.QuestType.stageProgress) {
+            public Quest(float id, string name, string helpText, string? completionCondition, Dictionary<int, Quest>? subQuests, Quests.QuestType? type = Quests.QuestType.stageProgress, bool isNew = true) {
+                IsNew = isNew;
                 Id = id;
                 Name = name;
                 HelpText = helpText;
@@ -35,8 +37,12 @@ namespace WorldOfZuul
                 SubQuests = subQuests;
             }
 
-            public void updateQuest() {
-                if(SubQuests != null) foreach(Quest _ in SubQuests.Values) _.updateQuest();
+            public void updateQuest(int? ID) {
+                if(IsNew) {
+                    IsNew = false;
+                    Screen.CommandOutputString.Add($"A new quest is available: '{ID}: {Name}'. To view quest details, use 'quests help {ID}'.");
+                }
+                if(SubQuests != null) foreach(Quest _ in SubQuests.Values) _.updateQuest(null);
                 switch(Type) {
                     case QuestType.visitRoom:
                         if(!Completed && Game.map.CurrentRoom.ShortDescription == CompletionCondition) Completed = true;

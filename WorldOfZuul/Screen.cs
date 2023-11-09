@@ -14,7 +14,7 @@ namespace WorldOfZuul {
         public (int, int) NamecardDimensions = (98, 7);
         public (int, int, int) TopBoxDimensions = (73, 25, 7);
         public (int, int, int) BottomBoxDimensions = (73, 25, 8);
-        public static List<string> CommandOutputString = new() {"", "Type 'north', 'east', 'south', or 'west' to move. To print more available commands, type 'help'.", "Start by having a look at your quests by typing 'quests'. To get more help, use 'help quests'."};
+        public static List<string> CommandOutputString = new() {""};
 
         // https://en.wikipedia.org/wiki/Box-drawing_character
         public List<char> BoxCharacters = new() {

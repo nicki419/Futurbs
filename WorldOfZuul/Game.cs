@@ -9,11 +9,12 @@ namespace WorldOfZuul
         private Room? previousRoom;
         public static string? playerName;
         private gameLogic gameLogic;
+        private gameLogic.StageTut stageTut;
         private gameLogic.Stage0 stage0;
         private gameLogic.Stage1 stage1;
 
         // Don't forget to create a new object
-        public static Map map = gameLogic.Stage0.StageMap;
+        public static Map map = gameLogic.StageTut.StageMap;
         public static Dictionary<int, Quests.Quest> currentQuests = new();
 
         public readonly Screen screen = new();
@@ -21,7 +22,7 @@ namespace WorldOfZuul
         public bool textInput = true;
         public string lastOutputString = "";
         public string compareOutputString = "";
-        public int ScrollingTextSleepDuration = 20;
+        public int ScrollingTextSleepDuration = 0;
         private string? input;
         public static List<Quests.Quest> TrackedQuests = new();
 
@@ -29,13 +30,14 @@ namespace WorldOfZuul
         public Game()
         {
             gameLogic = new();
+            stageTut = new();
             stage0 = new();
             stage1 = new();
             //map = gameLogic.Stage0.StageMap;
-            currentQuests.Add(1, gameLogic.Stage0.Quests["headToOffice"]);
-            currentQuests.Add(2, gameLogic.Stage0.Quests["talkToAdvisor"]);
-            TrackedQuests.Add(currentQuests[1]);
-            TrackedQuests.Add(currentQuests[2]);
+            //currentQuests.Add(1, gameLogic.Stage0.Quests["headToOffice"]);
+            //currentQuests.Add(2, gameLogic.Stage0.Quests["talkToAdvisor"]);
+            //TrackedQuests.Add(currentQuests[1]);
+            //TrackedQuests.Add(currentQuests[2]);
         }
 
         public void Play()
@@ -44,7 +46,7 @@ namespace WorldOfZuul
             Parser parser = new();
 
             bool continuePlaying = true;
-            lastOutputString = $"Welcome to Futurbs!\nFuturbs is a new, incredibly not-boring adventure game.\n\n{map.CurrentRoom?.LongDescription}\n";
+            lastOutputString = $"{map.CurrentRoom?.LongDescription}\n";
             //PrintHelp(null);
 
             screen.InitialiseScreen();
