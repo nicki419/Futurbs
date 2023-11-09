@@ -98,6 +98,8 @@ namespace WorldOfZuul
                 Game.map = StageMap;
                 StageMap.CurrentRoom = StageMap.Rooms["cityCentre"];
                 UpdateState();
+                Program.game.lastOutputString = StageMap.Rooms["cityCentre"].LongDescription;
+                //Program.game.screen.DrawInfoText();
             }
             public static void UpdateState() {
                 foreach(KeyValuePair<int, Quests.Quest> _ in Game.currentQuests) _.Value.updateQuest(_.Key);
