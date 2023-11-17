@@ -14,7 +14,7 @@ namespace WorldOfZuul {
         public (int, int) NamecardDimensions = (98, 7);
         public (int, int, int) TopBoxDimensions = (73, 25, 7);
         public (int, int, int) BottomBoxDimensions = (73, 25, 8);
-        public static List<string> CommandOutputString = new() {"", "Type 'north', 'east', 'south', or 'west' to move. To print more available commands, type 'help'."};
+        public static List<string> CommandOutputString = new() {""};
 
         // https://en.wikipedia.org/wiki/Box-drawing_character
         public List<char> BoxCharacters = new() {
@@ -116,7 +116,7 @@ namespace WorldOfZuul {
         }
 
         public void DrawMiniMap() {
-            string mapString = Program.game.map.MiniMap();
+            string mapString = Game.map.MiniMap();
             string[] stringArray = Regex.Split(mapString, "\r\n|\r|\n");
 
             // Clean the screen:
@@ -135,6 +135,23 @@ namespace WorldOfZuul {
             for(int i = 1; i < stringArray.Count(); ++i){
                 Console.SetCursorPosition(TopBoxDimensions.Item1 + 4, Console.GetCursorPosition().Top + 1);
                 Console.Write(stringArray[i]);
+            }
+
+            Console.SetCursorPosition(TopBoxDimensions.Item1 + 4, Console.GetCursorPosition().Top + 1);
+            Console.Write("Tracked Quests:");
+
+            // Running loop twice so that completed quests are printed always at the bottom
+            foreach(Quests.Quest _ in Game.TrackedQuests) {
+                if(Console.GetCursorPosition().Top <= 25 && !_.Completed) {
+                    Console.SetCursorPosition(TopBoxDimensions.Item1 + 4, Console.GetCursorPosition().Top + 1);
+                    Console.Write($"  {_.Name}");
+                }
+            }
+            foreach(Quests.Quest _ in Game.TrackedQuests) {
+                if(Console.GetCursorPosition().Top <= 25 && _.Completed) {
+                    Console.SetCursorPosition(TopBoxDimensions.Item1 + 4, Console.GetCursorPosition().Top + 1);
+                    Console.Write($"X {_.Name}");
+                }
             }
         }
 
@@ -265,11 +282,16 @@ namespace WorldOfZuul {
         }
 
         public string? ReadLine() {
+            if(!Program.game.textInput) {
+                Program.game.textInput = true;
+                DrawInputText();
+            }
             string? output = "";
             while(true) {
-                ConsoleKey inputKey = Console.ReadKey(true).Key;
+                ConsoleKeyInfo inputKey = Console.ReadKey(true);
+                //string inputString = $"{inputKey.KeyChar}";
 
-                if(inputKey == ConsoleKey.Backspace) {
+                if(inputKey.Key == ConsoleKey.Backspace) {
                     // nested if needed to trigger above condition on all backspace presses. Otherwise will add "Backspace" 
                     // to string and continue to remove characters afterwards, going off screen.
                     if(output.Length > 0) {
@@ -279,17 +301,17 @@ namespace WorldOfZuul {
                         Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
                     }
                 }
-                else if(inputKey == ConsoleKey.Enter) {
+                else if(inputKey.Key == ConsoleKey.Enter) {
                     if(output.Length == 0) return null;
                     else return output;
                 }
-                else if(inputKey == ConsoleKey.Spacebar) {
+                else if(inputKey.Key == ConsoleKey.Spacebar) {
                     output += " ";
                     Console.Write(' ');
                 }
-                else if(new Regex("^[a-zA-Z]+$").IsMatch(inputKey.ToString()) && Console.GetCursorPosition().Left < 74) {
-                    output += inputKey.ToString();
-                    Console.Write(inputKey.ToString().ToLower());
+                else if(new Regex("^[A-Za-z0-9_.]+$").IsMatch($"{inputKey.KeyChar}") && Console.GetCursorPosition().Left < 74) {
+                    output += $"{inputKey.KeyChar}";
+                    Console.Write($"{inputKey.KeyChar}".ToLower());
                     //Console.Write(inputKey.ToString());
                 }
 
