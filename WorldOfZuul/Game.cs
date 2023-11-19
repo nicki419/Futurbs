@@ -56,9 +56,7 @@ namespace WorldOfZuul
             while (continuePlaying) {
                 if(mapMode) {
                     MapDrawer mapDrawer = new();
-                    
-
-                    continue;
+                    //continue;
                 }
 
                 gameLogic.UpdateGameState();

@@ -283,6 +283,9 @@ namespace WorldOfZuul {
             Console.Write(BoxCharacters[1]);
             Console.SetCursorPosition(TopBoxDimensions.Item1 + 2, NamecardDimensions.Item2 + TopBoxDimensions.Item3 + 4);
             Console.Write(BoxCharacters[1]);
+
+            Console.SetCursorPosition(2, NamecardDimensions.Item2 + 3);
+            Console.Write("Press [ESC] to close the map.");
         }
 
         public void InitialiseScreen() {
