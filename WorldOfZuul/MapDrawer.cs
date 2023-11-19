@@ -10,6 +10,7 @@ namespace WorldOfZuul
     {
         private Room selectedRoom = Game.map.CurrentRoom;
         private (int, int) selectedRoomPosition;
+        private (int, int) currentRoomPosition;
         private List<Room> processedRooms = new();
         private bool ExitMap = false;
 
@@ -35,7 +36,9 @@ namespace WorldOfZuul
                     Console.Write("Press [Enter] to fast travel.");
                 }
                 Console.SetCursorPosition(selectedRoomPosition.Item1, selectedRoomPosition.Item2);
-                Room? fasttravelRoom = NavigateMap();
+                Room? fastTravelRoom = NavigateMap();
+                if(fastTravelRoom != null) FastTravel(fastTravelRoom);
+
                 if(ExitMap) {
                     ExitMapMode();
                     break;
@@ -45,8 +48,9 @@ namespace WorldOfZuul
 
         private void DrawMap() {
             Console.SetCursorPosition(Program.game.screen.TopBoxDimensions.Item1/2, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + 5);
-            if(selectedRoom == Game.map.Rooms["cityCentre"] || (Game.map.Rooms.ContainsKey("totorialRoom") && selectedRoom == Game.map.Rooms["tutorialRoom"])) {
+            if(selectedRoom == Game.map.Rooms["cityCentre"] || (Game.map.Rooms.ContainsKey("tutorialRoom") && selectedRoom == Game.map.Rooms["tutorialRoom"])) {
                 selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                currentRoomPosition = selectedRoomPosition;
                 Console.Write("[X]");
             } else Console.Write("[ ]");
             
@@ -70,6 +74,7 @@ namespace WorldOfZuul
                             Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top - 1);
                             if(_.Value == selectedRoom) {
                                 selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                                currentRoomPosition = selectedRoomPosition;
                                 Console.Write("[X]");
                             } else Console.Write("[ ]");
                             Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
@@ -83,6 +88,7 @@ namespace WorldOfZuul
                             Console.Write('\u2500');
                             if(_.Value == selectedRoom) {
                                 selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                                currentRoomPosition = selectedRoomPosition;
                                 Console.Write("[X]");
                             } else Console.Write("[ ]");
                             Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
@@ -97,6 +103,7 @@ namespace WorldOfZuul
                             Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top + 1);
                             if(_.Value == selectedRoom) {
                                 selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                                currentRoomPosition = selectedRoomPosition;
                                 Console.Write("[X]");
                             } else Console.Write("[ ]");
                             Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
@@ -110,6 +117,7 @@ namespace WorldOfZuul
                             Console.SetCursorPosition(Console.GetCursorPosition().Left - 4, Console.GetCursorPosition().Top);
                             if(_.Value == selectedRoom) {
                                 selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                                currentRoomPosition = selectedRoomPosition;
                                 Console.Write("[X]");
                             } else Console.Write("[ ]");
                             Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
@@ -150,6 +158,9 @@ namespace WorldOfZuul
                     break;
                 
                 case ConsoleKey.Enter:
+                    if(gameLogic.GameStage >= -1) {
+                        return selectedRoom;
+                    }
                     break;
                 
                 case ConsoleKey.UpArrow:
@@ -204,6 +215,63 @@ namespace WorldOfZuul
             Program.game.screen.DrawMiniMap();
             Program.game.screen.DrawInfoText();
             Program.game.screen.DrawInputText();
+        }
+
+        private void FastTravel(Room destinationRoom) {
+            List<char> path = new();
+            processedRooms = new();
+            bool pathFound = false;
+            FindPath(Game.map.CurrentRoom, null);
+            
+            void FindPath(Room currentRoom, string? previousRoom) {
+                if(!pathFound) {
+                    foreach(KeyValuePair<string, Room> _ in currentRoom.Exits) {
+                        if(_.Value != null && _.Key != previousRoom && !processedRooms.Contains(_.Value)) {
+                            switch(_.Key){
+                                case "north":
+                                    path.Add('n');
+                                    if(_.Value == selectedRoom) {
+                                        pathFound = true;
+                                        return;
+                                    }
+                                    FindPath(_.Value, "south");
+                                    break;
+
+                                case "east":
+                                    path.Add('e');
+                                    if(_.Value == selectedRoom) {
+                                        pathFound = true;
+                                        return;
+                                    }
+                                    FindPath(_.Value, "west");
+                                    break;
+
+                                case "south":
+                                    path.Add('s');
+                                    if(_.Value == selectedRoom) {
+                                        pathFound = true;
+                                        return;
+                                    }
+                                    FindPath(_.Value, "north");
+                                    break;
+
+                                case "west":
+                                    path.Add('w');
+                                    if(_.Value == selectedRoom) {
+                                        pathFound = true;
+                                        return;
+                                    }
+                                    FindPath(_.Value, "east");
+                                    break;
+                            }
+                        }
+                    }
+                    if(!pathFound) {
+                        path.RemoveAt(path.Count - 1);
+                        processedRooms.Add(currentRoom);
+                    }
+                }
+            }
         }
     }
 }

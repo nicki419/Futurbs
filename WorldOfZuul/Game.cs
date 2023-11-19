@@ -27,6 +27,7 @@ namespace WorldOfZuul
         public int ScrollingTextSleepDuration = 0;
         private string? input;
         public static List<Quests.Quest> TrackedQuests = new();
+        public bool? TravelByCar = false;
 
 
         public Game()
