@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace WorldOfZuul
 {
@@ -20,9 +21,10 @@ namespace WorldOfZuul
         public readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
         public bool textInput = true;
+        public bool mapMode = false;
         public string lastOutputString = "";
         public string compareOutputString = "";
-        public int ScrollingTextSleepDuration = 20;
+        public int ScrollingTextSleepDuration = 0;
         private string? input;
         public static List<Quests.Quest> TrackedQuests = new();
 
@@ -52,6 +54,13 @@ namespace WorldOfZuul
             screen.InitialiseScreen();
 
             while (continuePlaying) {
+                if(mapMode) {
+                    MapDrawer mapDrawer = new();
+                    
+
+                    continue;
+                }
+
                 gameLogic.UpdateGameState();
 
                 if(compareOutputString != lastOutputString) screen.DrawInfoText();
@@ -181,8 +190,12 @@ namespace WorldOfZuul
                         break;
 
                     case "quests":
-                    Screen.CommandOutputString.Add($"> {input}");
+                        Screen.CommandOutputString.Add($"> {input}");
                         QuestsCommand(command.SecondWord);
+                        break;
+                    
+                    case "map":
+                        mapMode = true;
                         break;
 
                     default:
