@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 
 namespace WorldOfZuul
@@ -288,7 +289,7 @@ namespace WorldOfZuul
                     ++questCounter;
                 }
                 Game.map = StageMap;
-                StageMap.CurrentRoom = StageMap.Rooms["townHall"];
+                StageMap.CurrentRoom = StageMap.Rooms["mayorsOffice"];
                 UpdateState();
             }
             public static void UpdateState() {
@@ -305,6 +306,10 @@ namespace WorldOfZuul
                         WorldOfZuul.Quests.QuestType.stageProgress
                     ));
                     Game.currentQuests.Add(2, Quests["talkToAdvisor"]);
+                }
+                else if(Quests["exploreCity"].Completed && Quests.ContainsKey("talkToAdvisor") && Quests["talkToAdvisor"].Completed) {
+                    GameStage = 2;
+                    Stage2.InitialiseState();
                 }
             }
 
@@ -331,20 +336,21 @@ namespace WorldOfZuul
                     new(){
                     {1, new(
                         2.11f,
-                        "Choose Transport",
+                        "Choose Mode of Transport",
                         "",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.StageProgression,
+                        WorldOfZuul.Quests.QuestType.stageProgress,
                         false
                     )},
+                    
                     {2, new(
                         2.12f,
                         "Read the News",
                         "",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.StageProgression,
+                        WorldOfZuul.Quests.QuestType.stageProgress,
                         false
                     )},
                     {3, new(
@@ -353,22 +359,21 @@ namespace WorldOfZuul
                         "",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.StageProgression,
+                        WorldOfZuul.Quests.QuestType.stageProgress,
                         false
-                    )}, },
-                    WorldOfZuul.Quests.QuestType.SubQuests
+                    )}, }
                 )
 
                 },                       
-                }
+                };
                 
-            public static void NPC[] npcs = {
+            public static NPC[] npcs = {
                 new(
                     "Advisor",
                     "Your Advisor in all matters around the city",
                     new() {
-                        {0, "You need to choose a mode of transportation, you can go to the City center and proceed to the car dealership, alternativly you can go to the Market and get a bike, which might be better but slower."}
-                        {1, "Congratulations on getting a car, now you can go where ever you want instantly, albeit at the cost of polluting the city."}
+                        {0, "You need to choose a mode of transportation, you can go to the City center and proceed to the car dealership, alternativly you can go to the Market and get a bike, which might be better but slower."},
+                        {1, "Congratulations on getting a car, now you can go where ever you want instantly, albeit at the cost of polluting the city."},
                         {2, "Congratulations on getting a bike, now you can get around town faster without in a climate-friendly manner."}
                     },
                     $"What a lovely day, isn't it {Game.playerName}?",
@@ -376,11 +381,25 @@ namespace WorldOfZuul
                 ),
                 new(
                     "Car Vendor",
-                    "Your go to man for vehicular travel"
+                    "Your go to man for vehicular travel",
+                    new() {
+                        {0, "Welcome mayor to my humble garage, which takes care of all your vehicular needs. I heard you are in need of a car and I have specially prepared a 2009 VW Passat 2.0 TDI just for you boss man. Would you like this car? (y/n)"},
+                        {1, "This car will provide you great comfort, but at a price... Use the map command, select your destination with the arrow keys, and press [Enter] to travel anywhere in the city."},
+                        {2, "Come back anytime if you change your mind!"}
+                    },
+                    "",
+                    StageMap.Rooms["cityCentre"]
                 ),
                 new(
                     "Bike Vendor",
-                    "The man that specialises in two wheel"
+                    "The man that specialises in two wheel",
+                    new() {
+                        {0, "Welcome, Mayor! I'm glad you want to travel around by bike. While it might not be the fastest way to get around, it is most certainly the best for the environment! Would you like a bike? (y/n)"},
+                        {1, "Thank you for choosing to travel by bike! Use the map command, select your destination with the arrow keys, and press [Enter] to travel anywhere in the city."},
+                        {2, "Come back anytime if you change your mind!"}
+                        },
+                    "",
+                    StageMap.Rooms["market"]
                 )
             };
 
@@ -389,8 +408,8 @@ namespace WorldOfZuul
                 StageProgression = new(){
                     {"mayorsDuty", false},
                     {"theGhetoQuestion", false}
-                }
-            };
+                };
+            }
             
             public static void InitialiseState(){
                 Game.currentQuests = new();
@@ -415,8 +434,8 @@ namespace WorldOfZuul
                         "Having inspected the situation in the Ghetto, you must now make a decision that impacts the future of the area. Talk to your advisor to make the decision.",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.stageProgression
-                    ))
+                        WorldOfZuul.Quests.QuestType.stageProgress
+                    ));
                 }
 
             }
@@ -425,15 +444,53 @@ namespace WorldOfZuul
                 if(!Quests["mayorsDuty"].Completed){
                     Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[0]}";
                 }
-                else if(Quests["mayorsDuty"].Completed && Program.game.TravelByCar){
+                else if(Quests["mayorsDuty"].Completed && Program.game.TravelByCar == true){
                     Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[1]}";
                 }
-                else if(Quests["mayorsDuty"].Completed && !Program.game.TravelByCar){
+                else if(Quests["mayorsDuty"].Completed && Program.game.TravelByCar == false){
                     Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[2]}";
                 }
                 else{
                     Program.game.lastOutputString = $"What a lovely day, isn't it {Game.playerName}?";
                 }
+            }
+
+            public static void CarVendor(){
+                if(Program.game.TravelByCar == null){
+                    string? playerAnswer;
+                    Program.game.lastOutputString = npcs[1].Dialogue[0];
+                    do {
+                        Program.game.screen.DrawInfoText();
+                        Program.game.screen.DrawInputText();
+                        playerAnswer = Program.game.screen.ReadLine();
+                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "I don't understand your answer. Do you want the car? Answer either 'y' for yes or 'n' for no.";
+                    } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
+                        if(playerAnswer == "y"){
+                            Program.game.lastOutputString = npcs[1].Dialogue[0];
+                            Program.game.TravelByCar = true;
+                            Quests.Quest? mayorsDutyQuest;
+                            if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
+                        } else Program.game.lastOutputString = npcs[1].Dialogue[2];
+                } else Program.game.lastOutputString = npcs[1].Dialogue[1];
+            }
+
+            public static void BikeVendor(){
+                if(Program.game.TravelByCar == null) {
+                    string? playerAnswer;
+                    Program.game.lastOutputString = npcs[2].Dialogue[0];
+                    do {
+                        Program.game.screen.DrawInfoText();
+                        Program.game.screen.DrawInputText();
+                        playerAnswer = Program.game.screen.ReadLine();
+                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "I don't understand your answer. Do you want the bike? Answer either 'y' for yes or 'n' for no.";
+                    } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
+                    if(playerAnswer == "y") {
+                        Program.game.lastOutputString = npcs[2].Dialogue[1];
+                        Program.game.TravelByCar = false;
+                        Quests.Quest? mayorsDutyQuest;
+                        if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
+                    } else Program.game.lastOutputString = npcs[2].Dialogue[2];
+                } else Program.game.lastOutputString = npcs[2].Dialogue[1];
             }
 
 
@@ -452,7 +509,7 @@ namespace WorldOfZuul
                     Stage1.UpdateState();
                     break;
                 case 2:
-                    Stage2.UpdateGameState();
+                    Stage2.UpdateState();
                     break;
             }
         }
