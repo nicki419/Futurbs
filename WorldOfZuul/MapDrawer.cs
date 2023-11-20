@@ -67,63 +67,87 @@ namespace WorldOfZuul
 
         private void DrawRoom(Room currentRoom, string? previousRoom) {
             foreach(KeyValuePair<string, Room> _ in currentRoom.Exits) {
-                if(_.Value != null && _.Key != previousRoom && !processedRooms.Contains(_.Value)) {
+                if(_.Value != null && _.Key != previousRoom) {
                     switch(_.Key) {
                         case "north":
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top - 1);
-                            Console.Write('\u2502');
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top - 1);
-                            if(_.Value == selectedRoom) {
-                                selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
-                                currentRoomPosition = selectedRoomPosition;
-                                Console.Write("[X]");
-                            } else Console.Write("[ ]");
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
-                            processedRooms.Add(_.Value);
-                            DrawRoom(_.Value, "south");
+                            if(!processedRooms.Contains(_.Value)) {       
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top - 1);
+                                Console.Write('\u2502');
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top - 1);
+                                if(_.Value == selectedRoom) {
+                                    selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                                    currentRoomPosition = selectedRoomPosition;
+                                    Console.Write("[X]");
+                                } else Console.Write("[ ]");
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
+                                processedRooms.Add(_.Value);
+                                DrawRoom(_.Value, "south");
+                            } else {
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top - 1);
+                                Console.Write('\u2502');
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top - 1);
+                            }
 
                             break;
                         
                         case "east":
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left + 2, Console.GetCursorPosition().Top);
-                            Console.Write('\u2500');
-                            if(_.Value == selectedRoom) {
-                                selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
-                                currentRoomPosition = selectedRoomPosition;
-                                Console.Write("[X]");
-                            } else Console.Write("[ ]");
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
-                            processedRooms.Add(_.Value);
-                            DrawRoom(_.Value, "west");
+                            if(!processedRooms.Contains(_.Value)) {
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left + 2, Console.GetCursorPosition().Top);
+                                Console.Write('\u2500');
+                                if(_.Value == selectedRoom) {
+                                    selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                                    currentRoomPosition = selectedRoomPosition;
+                                    Console.Write("[X]");
+                                } else Console.Write("[ ]");
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
+                                processedRooms.Add(_.Value);
+                                DrawRoom(_.Value, "west");
+                            } else {
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left + 2, Console.GetCursorPosition().Top);
+                                Console.Write('\u2500');
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 3, Console.GetCursorPosition().Top);
+                            }
 
                             break;
 
                         case "south":
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top + 1);
-                            Console.Write('\u2502');
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top + 1);
-                            if(_.Value == selectedRoom) {
-                                selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
-                                currentRoomPosition = selectedRoomPosition;
-                                Console.Write("[X]");
-                            } else Console.Write("[ ]");
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
-                            processedRooms.Add(_.Value);
-                            DrawRoom(_.Value, "north");
+                            if(!processedRooms.Contains(_.Value)) {
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top + 1);
+                                Console.Write('\u2502');
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top + 1);
+                                if(_.Value == selectedRoom) {
+                                    selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                                    currentRoomPosition = selectedRoomPosition;
+                                    Console.Write("[X]");
+                                } else Console.Write("[ ]");
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
+                                processedRooms.Add(_.Value);
+                                DrawRoom(_.Value, "north");
+                            } else {
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top + 1);
+                                Console.Write('\u2502');
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top + 1);
+                            }
                             break;
 
                         case "west":
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
-                            Console.Write('\u2500');
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 4, Console.GetCursorPosition().Top);
-                            if(_.Value == selectedRoom) {
-                                selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
-                                currentRoomPosition = selectedRoomPosition;
-                                Console.Write("[X]");
-                            } else Console.Write("[ ]");
-                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
-                            processedRooms.Add(_.Value);
-                            DrawRoom(_.Value, "east");
+                            if(!processedRooms.Contains(_.Value)) {
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
+                                Console.Write('\u2500');
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 4, Console.GetCursorPosition().Top);
+                                if(_.Value == selectedRoom) {
+                                    selectedRoomPosition = (Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                                    currentRoomPosition = selectedRoomPosition;
+                                    Console.Write("[X]");
+                                } else Console.Write("[ ]");
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
+                                processedRooms.Add(_.Value);
+                                DrawRoom(_.Value, "east");
+                            } else {
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
+                                Console.Write('\u2500');
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            }
 
                             break;
                     }
