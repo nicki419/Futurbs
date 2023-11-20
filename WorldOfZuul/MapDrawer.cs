@@ -183,7 +183,7 @@ namespace WorldOfZuul
                     break;
                 
                 case ConsoleKey.Enter:
-                    if(gameLogic.GameStage >= 3 && selectedRoom != Game.map.CurrentRoom) {
+                    if(Program.game.TravelByCar != null && selectedRoom != Game.map.CurrentRoom) {
                         return selectedRoom;
                     }
                     break;
