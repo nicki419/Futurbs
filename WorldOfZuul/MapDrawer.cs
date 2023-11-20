@@ -222,11 +222,12 @@ namespace WorldOfZuul
             processedRooms = new();
             bool pathFound = false;
             FindPath(Game.map.CurrentRoom, null);
-            
+            DrawPath();
+
             void FindPath(Room currentRoom, string? previousRoom) {
                 if(!pathFound) {
                     foreach(KeyValuePair<string, Room> _ in currentRoom.Exits) {
-                        if(_.Value != null && _.Key != previousRoom && !processedRooms.Contains(_.Value)) {
+                        if(!pathFound && _.Value != null && _.Key != previousRoom && !processedRooms.Contains(_.Value)) {
                             switch(_.Key){
                                 case "north":
                                     path.Add('n');
@@ -269,6 +270,41 @@ namespace WorldOfZuul
                     if(!pathFound) {
                         path.RemoveAt(path.Count - 1);
                         processedRooms.Add(currentRoom);
+                    }
+                }
+            }
+            void DrawPath() {
+                Console.SetCursorPosition(currentRoomPosition.Item1, currentRoomPosition.Item2);
+                foreach(char _ in path) {
+                    switch(_) {
+                        case 'n':
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top - 1);
+                            Console.Write('\u2551');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top - 1);
+                            Thread.Sleep(150);
+                            break;
+
+                        case 'e':
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left + 2, Console.GetCursorPosition().Top);
+                            Console.Write('\u2550');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                            Thread.Sleep(150);
+                            break;
+
+                        case 's':
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top + 1);
+                            Console.Write('\u2551');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top + 1);
+                            Thread.Sleep(150);
+                            break;
+
+                        case 'w':
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 2, Console.GetCursorPosition().Top);
+                            Console.Write('\u2550');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 3, Console.GetCursorPosition().Top);
+                            Thread.Sleep(150);
+                            break;
+
                     }
                 }
             }
