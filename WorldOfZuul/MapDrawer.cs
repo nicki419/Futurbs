@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace WorldOfZuul
             MapLogic();
         }
         private void InitialiseScreen() {
-            //Console.CursorVisible = false;
+            Console.CursorVisible = false;
             Program.game.screen.ClearForMap();
         }
 
@@ -215,6 +216,7 @@ namespace WorldOfZuul
             Program.game.screen.DrawMiniMap();
             Program.game.screen.DrawInfoText();
             Program.game.screen.DrawInputText();
+            if(Program.game.textInput) Console.CursorVisible = true;
         }
 
         private void FastTravel(Room destinationRoom) {
@@ -223,6 +225,9 @@ namespace WorldOfZuul
             bool pathFound = false;
             FindPath(Game.map.CurrentRoom, null);
             DrawPath();
+            int travelSpeed;
+            if(Program.game.TravelByCar == true) travelSpeed = 200; else travelSpeed = 1000;
+            GoToPath();
 
             void FindPath(Room currentRoom, string? previousRoom) {
                 if(!pathFound) {
@@ -274,6 +279,16 @@ namespace WorldOfZuul
                 }
             }
             void DrawPath() {
+                Console.Write(' ');
+                Console.SetCursorPosition(1, Program.game.screen.NamecardDimensions.Item2 + 3);
+                Console.Write(new string(' ', Program.game.screen.TopBoxDimensions.Item1));
+                Console.SetCursorPosition(1, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + Program.game.screen.BottomBoxDimensions.Item3 + 5);
+                Console.Write(new string(' ', Program.game.screen.TopBoxDimensions.Item1));
+                Console.SetCursorPosition(2, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + Program.game.screen.BottomBoxDimensions.Item3 + 5);
+                Console.Write($"{(Program.game.TravelByCar == true ? "Driving" : "Cycling")} to {selectedRoom.ShortDescription}...");
+
+                Console.SetCursorPosition(currentRoomPosition.Item1, currentRoomPosition.Item2);
+                Console.Write('X');
                 Console.SetCursorPosition(currentRoomPosition.Item1, currentRoomPosition.Item2);
                 foreach(char _ in path) {
                     switch(_) {
@@ -307,6 +322,67 @@ namespace WorldOfZuul
 
                     }
                 }
+            }
+            void GoToPath() {
+                Console.SetCursorPosition(currentRoomPosition.Item1, currentRoomPosition.Item2);
+
+                foreach(char _ in path) {
+                    Thread.Sleep(travelSpeed);
+                    switch(_) {
+                        case 'n':
+                            Console.Write(' ');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top - 1);
+                            Console.Write('X');
+                            Thread.Sleep(travelSpeed);
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            Console.Write('\u2551');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top - 1);
+                            Console.Write('X');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            break;
+
+                        case 'e':
+                            Console.Write(' ');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                            Console.Write('X');
+                            Thread.Sleep(travelSpeed);
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            Console.Write('\u2550');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                            Console.Write('X');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            break;
+
+                        case 's':
+                            Console.Write(' ');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top + 1);
+                            Console.Write('X');
+                            Thread.Sleep(travelSpeed);
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            Console.Write('\u2551');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top + 1);
+                            Console.Write('X');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            break;
+
+                        case 'w':
+                            Console.Write(' ');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 3, Console.GetCursorPosition().Top);
+                            Console.Write('X');
+                            Thread.Sleep(travelSpeed);
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            Console.Write('\u2550');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 3, Console.GetCursorPosition().Top);
+                            Console.Write('X');
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                            break;
+
+                    }
+                }
+                Thread.Sleep(travelSpeed);
+                Game.map.CurrentRoom = destinationRoom;
+                Program.game.lastOutputString = Game.map.CurrentRoom.LongDescription;
+                ExitMap = true;
             }
         }
     }
