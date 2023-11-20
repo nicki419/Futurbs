@@ -273,6 +273,21 @@ namespace WorldOfZuul {
             }
         }
 
+        public void ClearForMap() {
+            // Clean the screen
+            for(int i = NamecardDimensions.Item2 + 3; i <= NamecardDimensions.Item2 + TopBoxDimensions.Item3 + BottomBoxDimensions.Item3 + 5; ++i) {
+                Console.SetCursorPosition(1, i);
+                Console.Write(new string(' ', TopBoxDimensions.Item1 + 1));
+            }
+            Console.SetCursorPosition(0, NamecardDimensions.Item2 + TopBoxDimensions.Item3 + 4);
+            Console.Write(BoxCharacters[1]);
+            Console.SetCursorPosition(TopBoxDimensions.Item1 + 2, NamecardDimensions.Item2 + TopBoxDimensions.Item3 + 4);
+            Console.Write(BoxCharacters[1]);
+
+            Console.SetCursorPosition(2, NamecardDimensions.Item2 + 3);
+            Console.Write("Press [ESC] to close the map.");
+        }
+
         public void InitialiseScreen() {
             DrawOutlines();
             DrawNamecard();

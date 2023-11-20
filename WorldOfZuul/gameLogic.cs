@@ -73,7 +73,7 @@ namespace WorldOfZuul
                     "Your Advisor in all matters around the city",
                     new() {
                         {0, "Welcome to the city, Sir! Care to share your name?"},
-                        {1, "Pleasure meeting you, [playerName]! To start out, you should familiarise yourself with the city. Have a little walk, and return to me once you have visited every area. One last thing: You can keep track of your progress with the quests command. Use [help quests] to find out how to track your quests."},
+                        {1, "Pleasure meeting you, [playerName]! To start out, you should familiarise yourself with the city. Have a little walk, and return to me once you have visited every area. The map command can help you get an overview of the city. One last thing: You can keep track of your progress with the quests command. Use [help quests] to find out how to track your quests."},
                     },
                     $"What a lovely day, isn't it {Game.playerName}?",
                     StageMap.Rooms["mayorsOffice"]
@@ -117,7 +117,7 @@ namespace WorldOfZuul
                     Quests["talkToAdvisor"].updateQuest(2);
                 }
                 if(Quests["headToOffice"].Completed && Quests.ContainsKey("talkToAdvisor") && Quests["talkToAdvisor"].Completed) StageProgression["questsDone"] = true;
-                if(StageProgression["questsDone"] && Game.map.CurrentRoom == StageMap.Rooms["townHall"]) {
+                if(StageProgression["questsDone"]) {
                     GameStage = 1;
                     Stage1.InitialiseState();
                 }
@@ -149,7 +149,7 @@ namespace WorldOfZuul
                 {"exploreCity", new(
                 1.1f,
                 "Explore the City",
-                "Use cardinal direction commands to navigate throughout the city.",
+                "Use cardinal direction commands to navigate throughout the city. Use the map command to get an overview of the city.",
                 null,
                 new() {
                     {1, new(
@@ -270,7 +270,7 @@ namespace WorldOfZuul
             };
 
             public Stage1() {
-                StageMap.CurrentRoom = StageMap.Rooms["townHall"];
+                StageMap.CurrentRoom = StageMap.Rooms["mayorsOffice"];
                 StageProgression = new() {
                     {"visitTown", false},
                     {"talkToAdvisor", false},
@@ -313,7 +313,6 @@ namespace WorldOfZuul
                 else {
                     Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[1].Replace("[playerName]", Game.playerName)}";
                     Quests["talkToAdvisor"].Completed = true;
-                    Screen.CommandOutputString.Add("Thank you for playing the Demo Version of Futurbs. You have reached the end of the current achievable progress, but you are free to explore the city as you please.");
                 }
             }
         }

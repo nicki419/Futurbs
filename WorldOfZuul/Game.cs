@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace WorldOfZuul
 {
@@ -20,11 +21,13 @@ namespace WorldOfZuul
         public readonly Screen screen = new();
         public CommandWords.GameCommand activeCommand;
         public bool textInput = true;
+        public bool mapMode = false;
         public string lastOutputString = "";
         public string compareOutputString = "";
         public int ScrollingTextSleepDuration = 20;
         private string? input;
         public static List<Quests.Quest> TrackedQuests = new();
+        public bool? TravelByCar;
 
 
         public Game()
@@ -52,6 +55,11 @@ namespace WorldOfZuul
             screen.InitialiseScreen();
 
             while (continuePlaying) {
+                if(mapMode) {
+                    MapDrawer mapDrawer = new();
+                    //continue;
+                }
+
                 gameLogic.UpdateGameState();
 
                 if(compareOutputString != lastOutputString) screen.DrawInfoText();
@@ -155,12 +163,13 @@ namespace WorldOfZuul
                         Screen.CommandOutputString.Add($"> {input}");
                         textInput = !textInput;
                         break;
-                    /* // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
+                    /*// UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
                     case "build":
                         lastOutputString = map.CreateBuilding("School", "Here Kids go to have 12 years of neverending fun!", (map.Rooms["recreationalArea1"], null, null, map.Rooms["ghetto"]));
                         //lastOutputString += map.Rooms["School"].Exits["east"].ShortDescription;
                         break;
                     */
+                    
                     case "textspeed":
                         Screen.CommandOutputString.Add($"> {input}");
                         ScrollingText(command.SecondWord);
@@ -181,8 +190,12 @@ namespace WorldOfZuul
                         break;
 
                     case "quests":
-                    Screen.CommandOutputString.Add($"> {input}");
+                        Screen.CommandOutputString.Add($"> {input}");
                         QuestsCommand(command.SecondWord);
+                        break;
+                    
+                    case "map":
+                        mapMode = true;
                         break;
 
                     default:
