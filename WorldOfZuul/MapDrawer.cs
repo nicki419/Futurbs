@@ -85,7 +85,7 @@ namespace WorldOfZuul
                             } else {
                                 Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top - 1);
                                 Console.Write('\u2502');
-                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top - 1);
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top + 1);
                             }
 
                             break;
@@ -126,7 +126,7 @@ namespace WorldOfZuul
                             } else {
                                 Console.SetCursorPosition(Console.GetCursorPosition().Left, Console.GetCursorPosition().Top + 1);
                                 Console.Write('\u2502');
-                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top + 1);
+                                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top - 1);
                             }
                             break;
 
@@ -183,7 +183,7 @@ namespace WorldOfZuul
                     break;
                 
                 case ConsoleKey.Enter:
-                    if(gameLogic.GameStage >= -1) {
+                    if(gameLogic.GameStage >= 3 && selectedRoom != Game.map.CurrentRoom) {
                         return selectedRoom;
                     }
                     break;
@@ -244,63 +244,74 @@ namespace WorldOfZuul
         }
 
         private void FastTravel(Room destinationRoom) {
+            Dictionary<int, List<char>> possiblePaths = new();
+            int dictIndex = 0;
             List<char> path = new();
             processedRooms = new();
-            bool pathFound = false;
+            possiblePaths.Add(0, new());
             FindPath(Game.map.CurrentRoom, null);
+            path = new(possiblePaths[0]);
+            for(int i = 1; i < possiblePaths.Count; ++i) {
+                if(possiblePaths[i].Count > 0 && possiblePaths[i].Count < path.Count) path = new(possiblePaths[i]);
+            }
             DrawPath();
             int travelSpeed;
-            if(Program.game.TravelByCar == true) travelSpeed = 200; else travelSpeed = 1000;
+            if(Program.game.TravelByCar == true) travelSpeed = 150; else travelSpeed = 1000;
             GoToPath();
 
             void FindPath(Room currentRoom, string? previousRoom) {
-                if(!pathFound) {
-                    foreach(KeyValuePair<string, Room> _ in currentRoom.Exits) {
-                        if(!pathFound && _.Value != null && _.Key != previousRoom && !processedRooms.Contains(_.Value)) {
-                            switch(_.Key){
-                                case "north":
-                                    path.Add('n');
-                                    if(_.Value == selectedRoom) {
-                                        pathFound = true;
-                                        return;
-                                    }
-                                    FindPath(_.Value, "south");
-                                    break;
+                foreach(KeyValuePair<string, Room> _ in currentRoom.Exits) {
+                    if(!processedRooms.Contains(_.Value) && _.Key != previousRoom) {
+                        processedRooms.Add(_.Value);
+                        switch(_.Key){
+                            case "north":
+                                possiblePaths[dictIndex].Add('n');
+                                if(_.Value == selectedRoom) {
+                                    ++dictIndex;
+                                    possiblePaths.Add(dictIndex, new(possiblePaths[dictIndex - 1]));
+                                    //possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
+                                    //return;
+                                }
+                                FindPath(_.Value, "south");
+                                break;
 
-                                case "east":
-                                    path.Add('e');
-                                    if(_.Value == selectedRoom) {
-                                        pathFound = true;
-                                        return;
-                                    }
-                                    FindPath(_.Value, "west");
-                                    break;
+                            case "east":
+                                possiblePaths[dictIndex].Add('e');
+                                if(_.Value == selectedRoom) {
+                                    ++dictIndex;
+                                    possiblePaths.Add(dictIndex, new(possiblePaths[dictIndex - 1]));
+                                    //possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
+                                    //return;
+                                }
+                                FindPath(_.Value, "west");
+                                break;
 
-                                case "south":
-                                    path.Add('s');
-                                    if(_.Value == selectedRoom) {
-                                        pathFound = true;
-                                        return;
-                                    }
-                                    FindPath(_.Value, "north");
-                                    break;
+                            case "south":
+                                possiblePaths[dictIndex].Add('s');
+                                if(_.Value == selectedRoom) {
+                                    ++dictIndex;
+                                    possiblePaths.Add(dictIndex, new(possiblePaths[dictIndex - 1]));
+                                    //possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
+                                    //return;
+                                }
+                                FindPath(_.Value, "north");
+                                break;
 
-                                case "west":
-                                    path.Add('w');
-                                    if(_.Value == selectedRoom) {
-                                        pathFound = true;
-                                        return;
-                                    }
-                                    FindPath(_.Value, "east");
-                                    break;
-                            }
+                            case "west":
+                                possiblePaths[dictIndex].Add('w');
+                                if(_.Value == selectedRoom) {
+                                    ++dictIndex;
+                                    possiblePaths.Add(dictIndex, new(possiblePaths[dictIndex - 1]));
+                                    //possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
+                                    //return;
+                                }
+                                FindPath(_.Value, "east");
+                                break;
                         }
                     }
-                    if(!pathFound) {
-                        path.RemoveAt(path.Count - 1);
-                        processedRooms.Add(currentRoom);
-                    }
                 }
+                if(possiblePaths[dictIndex].Count > 0) possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
+                processedRooms.Remove(currentRoom);
             }
             void DrawPath() {
                 Console.Write(' ');

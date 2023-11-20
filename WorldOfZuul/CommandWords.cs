@@ -49,7 +49,7 @@ namespace WorldOfZuul
                 new("quests", "View your quests and their progress. To track/untrack a quest: quests (un)track [id]. To get help with a quest: quests help [id].", CommandCategory.Actions, null),
                 new("map", "View the Map and Fast Travel within the city.", CommandCategory.Actions, 'm'),
                 // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT IN Game.cs -> CommandHandler
-                new("build", "Creates a new Building.", CommandCategory.Actions, 'b'),
+                //new("build", "Creates a new Building.", CommandCategory.Actions, 'b'),
                 
             },
 

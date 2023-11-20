@@ -163,11 +163,12 @@ namespace WorldOfZuul
                         Screen.CommandOutputString.Add($"> {input}");
                         textInput = !textInput;
                         break;
-                    // UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
+                    /*// UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
                     case "build":
                         lastOutputString = map.CreateBuilding("School", "Here Kids go to have 12 years of neverending fun!", (map.Rooms["recreationalArea1"], null, null, map.Rooms["ghetto"]));
                         //lastOutputString += map.Rooms["School"].Exits["east"].ShortDescription;
                         break;
+                    */
                     
                     case "textspeed":
                         Screen.CommandOutputString.Add($"> {input}");
