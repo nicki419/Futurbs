@@ -195,6 +195,7 @@ namespace WorldOfZuul
                         break;
                     
                     case "map":
+                        Screen.CommandOutputString.Add($"> {input}");
                         mapMode = true;
                         break;
 

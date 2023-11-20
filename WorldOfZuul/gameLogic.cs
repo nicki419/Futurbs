@@ -373,6 +373,14 @@ namespace WorldOfZuul
                     },
                     $"What a lovely day, isn't it {Game.playerName}?",
                     StageMap.Rooms["mayorsOffice"]
+                ),
+                new(
+                    "Car Vendor",
+                    "Your go to man for vehicular travel"
+                ),
+                new(
+                    "Bike Vendor",
+                    "The man that specialises in two wheel"
                 )
             };
 
@@ -404,7 +412,7 @@ namespace WorldOfZuul
                     Quests.Add("theGhettoQuestion", new(
                         2.2f,
                         "The Ghetto Question",
-                        "Having inspected the situation in the Ghettos, you must now make a decision that impacts the future of the area. Talk to your advisor to make the decision.",
+                        "Having inspected the situation in the Ghetto, you must now make a decision that impacts the future of the area. Talk to your advisor to make the decision.",
                         "notCompleted",
                         null,
                         WorldOfZuul.Quests.QuestType.stageProgression
@@ -415,7 +423,16 @@ namespace WorldOfZuul
 
             public void Advisor(){
                 if(!Quests["mayorsDuty"].Completed){
-                    
+                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[0]}";
+                }
+                else if(Quests["mayorsDuty"].Completed && Program.game.TravelByCar){
+                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[1]}";
+                }
+                else if(Quests["mayorsDuty"].Completed && !Program.game.TravelByCar){
+                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[2]}";
+                }
+                else{
+                    Program.game.lastOutputString = $"What a lovely day, isn't it {Game.playerName}?";
                 }
             }
 
