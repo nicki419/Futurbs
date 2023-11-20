@@ -32,7 +32,7 @@ namespace WorldOfZuul
                 Console.Write(new string(' ', Program.game.screen.TopBoxDimensions.Item1));
                 Console.SetCursorPosition(2, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + Program.game.screen.BottomBoxDimensions.Item3 + 5);
                 Console.Write($"Currently Selected: {selectedRoom.ShortDescription} \t");
-                if(gameLogic.GameStage >= 3) {
+                if(Program.game.TravelByCar != null) {
                     Console.SetCursorPosition(Program.game.screen.TopBoxDimensions.Item1 - 27, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + Program.game.screen.BottomBoxDimensions.Item3 + 5);
                     Console.Write("Press [Enter] to fast travel.");
                 }
