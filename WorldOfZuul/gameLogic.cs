@@ -318,6 +318,111 @@ namespace WorldOfZuul
             }
         }
 
+        public class Stage2{
+
+            public static Map StageMap =  new(new string[] {"cityCentre", "townHall", "trainStation", "park1", "market", "residentialHouses", "recreationalArea1", "residentialBlocks", "park2", "ghetto", "IndustrialZone", "recreationalArea2", "mayorsOffice"});
+
+            public Dictionary<string, bool> StageProgression;
+            public static Dictionary<string, Quests.Quest> Quests = new(){
+                {"mayorsDuty", new(
+                    2.1f,
+                    "Mayor's Duty",
+                    "As the new Mayor, you have a few decisions to make, talk to your Advisor to for help.",
+                    null,
+                    new(){
+                    {1, new(
+                        2.11f,
+                        "Choose Transport",
+                        "",
+                        "notCompleted",
+                        null,
+                        WorldOfZuul.Quests.QuestType.StageProgression,
+                        false
+                    )},
+                    {2, new(
+                        2.12f,
+                        "Read the News",
+                        "",
+                        "notCompleted",
+                        null,
+                        WorldOfZuul.Quests.QuestType.StageProgression,
+                        false
+                    )},
+                    {3, new(
+                        2.13f,
+                        "Inspect the Ghetto",
+                        "",
+                        "notCompleted",
+                        null,
+                        WorldOfZuul.Quests.QuestType.StageProgression,
+                        false
+                    )}, },
+                    WorldOfZuul.Quests.QuestType.SubQuests
+                )
+
+                },                       
+                }
+                
+            public static void NPC[] npcs = {
+                new(
+                    "Advisor",
+                    "Your Advisor in all matters around the city",
+                    new() {
+                        {0, "You need to choose a mode of transportation, you can go to the City center and proceed to the car dealership, alternativly you can go to the Market and get a bike, which might be better but slower."}
+                        {1, "Congratulations on getting a car, now you can go where ever you want instantly, albeit at the cost of polluting the city."}
+                        {2, "Congratulations on getting a bike, now you can get around town faster without in a climate-friendly manner."}
+                    },
+                    $"What a lovely day, isn't it {Game.playerName}?",
+                    StageMap.Rooms["mayorsOffice"]
+                )
+            };
+
+            public Stage2(){
+                StageMap.CurrentRoom = StageMap.Rooms["townHall"];
+                StageProgression = new(){
+                    {"mayorsDuty", false},
+                    {"theGhetoQuestion", false}
+                }
+            };
+            
+            public static void InitialiseState(){
+                Game.currentQuests = new();
+                Game.TrackedQuests = new();
+                
+                int questCounter = 1;
+                foreach(Quests.Quest _ in Quests.Values) {
+                    Game.currentQuests.Add(questCounter, _);
+                    ++questCounter;
+                }
+                Game.map = StageMap;
+                StageMap.CurrentRoom = StageMap.Rooms["townHall"];
+                UpdateState();
+            }
+
+            public static void UpdateState(){
+                foreach(KeyValuePair<int, Quests.Quest> _ in Game.currentQuests) _.Value.updateQuest(_.Key);
+                if(Quests["mayorsDuty"].Completed && !Quests.ContainsKey("theGhettoQuestion")){
+                    Quests.Add("theGhettoQuestion", new(
+                        2.2f,
+                        "The Ghetto Question",
+                        "Having inspected the situation in the Ghettos, you must now make a decision that impacts the future of the area. Talk to your advisor to make the decision.",
+                        "notCompleted",
+                        null,
+                        WorldOfZuul.Quests.QuestType.stageProgression
+                    ))
+                }
+
+            }
+
+            public void Advisor(){
+                if(!Quests["mayorsDuty"].Completed){
+                    
+                }
+            }
+
+
+        }
+
         public static void UpdateGameState() {
             switch(GameStage) {
                 case -1:
@@ -329,6 +434,9 @@ namespace WorldOfZuul
 
                 case 1:
                     Stage1.UpdateState();
+                    break;
+                case 2:
+                    Stage2.UpdateGameState();
                     break;
             }
         }
