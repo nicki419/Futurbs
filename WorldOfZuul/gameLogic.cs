@@ -374,7 +374,10 @@ namespace WorldOfZuul
                     new() {
                         {0, "You need to choose a mode of transportation, you can go to the City center and proceed to the car dealership, alternativly you can go to the Market and get a bike, which might be better but slower."},
                         {1, "Congratulations on getting a car, now you can go where ever you want instantly, albeit at the cost of polluting the city."},
-                        {2, "Congratulations on getting a bike, now you can get around town faster without in a climate-friendly manner."}
+                        {2, "Congratulations on getting a bike, now you can get around town faster without in a climate-friendly manner."},
+                        {3, "After you have inspected the Ghetto and spoke with the residents you must now make a decision. You can either renovate it and improve the living conditions or demolish it and start from scratch. What dp you wish to do? (renovate/demolish)"},
+                        {4, "Good decision, I am sure the citizens will be looking forward to it. We shall place them in steel 18 square metter containers until the renovations are done."},
+                        {5, "A brave decision for a better future for the city. We shall place them in steel 18 square metter containers until the teraforming is done."}
                     },
                     $"What a lovely day, isn't it {Game.playerName}?",
                     StageMap.Rooms["mayorsOffice"]
@@ -400,6 +403,26 @@ namespace WorldOfZuul
                         },
                     "",
                     StageMap.Rooms["market"]
+                ),
+                new(
+                    "Informant",
+                    "The man that knows all the new's of Futurbs",
+                    new(){
+                        {0, "Hello, Mayor! On todays new's the city is doing moderatly well, except there has been some concerns in The Ghetto you should talk to the citizens there to find out what are their concerns."},
+                        {1, "What a lovely day isn't it [playerName]"}
+                    },
+                    "",
+                    StageMap.Rooms["townHall"]
+                ),
+                new(
+                    "Ghetto Citizen",
+                    "A random denisen of The Ghetto",
+                    new(){
+                        {0, "What a pleasent surprise, welcome Mayor. Life in The Ghteto is tough especially these times but its the only place that people like me can afford in this day and age. Would be nice to see this place be renovated, but that isn't in our hands."},
+                        {1, "I once was a mayor like you but then I got an arrow to the knee"}
+                    },
+                    "",
+                    StageMap.Rooms["ghetto"]
                 )
             };
 
@@ -407,7 +430,8 @@ namespace WorldOfZuul
                 StageMap.CurrentRoom = StageMap.Rooms["townHall"];
                 StageProgression = new(){
                     {"mayorsDuty", false},
-                    {"theGhetoQuestion", false}
+                    {"theGhettoQuestion", false},
+                    {"townNews", false}
                 };
             }
             
@@ -421,7 +445,7 @@ namespace WorldOfZuul
                     ++questCounter;
                 }
                 Game.map = StageMap;
-                StageMap.CurrentRoom = StageMap.Rooms["townHall"];
+                StageMap.CurrentRoom = StageMap.Rooms["mayorsOffice"];
                 UpdateState();
             }
 
@@ -451,46 +475,89 @@ namespace WorldOfZuul
                     Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[2]}";
                 }
                 else{
-                    Program.game.lastOutputString = $"What a lovely day, isn't it {Game.playerName}?";
+                    Program.game.lastOutputString = $"Advisor What a lovely day, isn't it {Game.playerName}?";
+                }
+                if(Quests["mayorsDuty"].Completed && !Quests["theGhettoQuestion"].Completed){
+                    Program.game.lastOutputString = $"Avisor: {npcs[0].Dialogue[3]}";
+                    string? playerAnswer;
+                    do{
+                        Program.game.screen.DrawInfoText();
+                        Program.game.screen.DrawInputText();
+                        playerAnswer = Program.game.screen.ReadLine();
+                        if(playerAnswer != null && !(playerAnswer == "renovate" || playerAnswer == "demolish")) Program.game.lastOutputString = $"Advisor: I don't understand your answer. Please tell me if you want to 'demolish' or 'renovate.' ";
+                    }while(playerAnswer != null && !(playerAnswer == "renovate" || playerAnswer == "demolish"));
+                    if(playerAnswer == "renovate"){
+                        Program.game.lastOutputString = $"Advisor : {npcs[0].Dialogue[4]}";
+                        Quests["theGhettoQuestion"].CompletionCondition = "completed";
+                        
+                    }else {
+                        Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[5]}";
+                        Quests["theGhettoQuestion"].CompletionCondition = "completed";
+                    }
+
+                    
                 }
             }
 
             public static void CarVendor(){
                 if(Program.game.TravelByCar == null){
                     string? playerAnswer;
-                    Program.game.lastOutputString = npcs[1].Dialogue[0];
+                    Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[0]}";
                     do {
                         Program.game.screen.DrawInfoText();
                         Program.game.screen.DrawInputText();
                         playerAnswer = Program.game.screen.ReadLine();
-                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "I don't understand your answer. Do you want the car? Answer either 'y' for yes or 'n' for no.";
+                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "Car Vendor: I don't understand your answer. Do you want the car? Answer either 'y' for yes or 'n' for no.";
                     } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
                         if(playerAnswer == "y"){
-                            Program.game.lastOutputString = npcs[1].Dialogue[0];
+                            Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[1]}";
                             Program.game.TravelByCar = true;
                             Quests.Quest? mayorsDutyQuest;
                             if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
                         } else Program.game.lastOutputString = npcs[1].Dialogue[2];
-                } else Program.game.lastOutputString = npcs[1].Dialogue[1];
+                } else Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[2]}";
             }
 
             public static void BikeVendor(){
                 if(Program.game.TravelByCar == null) {
                     string? playerAnswer;
-                    Program.game.lastOutputString = npcs[2].Dialogue[0];
+                    Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[0]}";
                     do {
                         Program.game.screen.DrawInfoText();
                         Program.game.screen.DrawInputText();
                         playerAnswer = Program.game.screen.ReadLine();
-                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "I don't understand your answer. Do you want the bike? Answer either 'y' for yes or 'n' for no.";
+                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "Bike Vendor: I don't understand your answer. Do you want the bike? Answer either 'y' for yes or 'n' for no.";
                     } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
                     if(playerAnswer == "y") {
-                        Program.game.lastOutputString = npcs[2].Dialogue[1];
+                        Program.game.lastOutputString = $" Bike Vendor: {npcs[2].Dialogue[1]}";
                         Program.game.TravelByCar = false;
                         Quests.Quest? mayorsDutyQuest;
                         if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
-                    } else Program.game.lastOutputString = npcs[2].Dialogue[2];
-                } else Program.game.lastOutputString = npcs[2].Dialogue[1];
+                    } else Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[2]}";
+                } else Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[1]}";
+            }
+
+            public static void Informant(){
+                Quests.Quest? mayorsDutyQuest;
+                Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest);
+                if(mayorsDutyQuest?.SubQuests != null && mayorsDutyQuest.SubQuests[2].Completed)
+                {
+                    Program.game.lastOutputString = $"Informant: {npcs[3].Dialogue[0]}";
+                    mayorsDutyQuest.SubQuests[2].CompletionCondition = "completed";
+                }else{
+                    Program.game.lastOutputString = $"Informant: {npcs[3].Dialogue[1].Replace("[playerName]", Game.playerName)}";
+                }
+            }
+
+            public static void GhettoCitizen(){
+                Quests.Quest? mayorsDutyQuest;
+                Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest);
+                if(mayorsDutyQuest?.SubQuests != null && mayorsDutyQuest.SubQuests[3].Completed){
+                    Program.game.lastOutputString = $"Ghetto Citizen: {npcs[4].Dialogue[0]} ";
+                    mayorsDutyQuest.SubQuests[3].CompletionCondition = "completed";
+                }else{
+                    Program.game.lastOutputString = $"Ghetto Citizen: {npcs[4].Dialogue[1]}";
+                }
             }
 
 
