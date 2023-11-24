@@ -3,8 +3,8 @@
     public class Room
     {
         public Building RoomBuilding;
-        public string ShortDescription { get; private set; }
-        public string LongDescription { get; private set;}
+        public string ShortDescription { get; set; }
+        public string LongDescription { get; set;}
 
         public string? north {get; private set;}
         public string? east {get; private set;}

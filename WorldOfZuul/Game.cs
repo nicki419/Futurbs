@@ -14,6 +14,7 @@ namespace WorldOfZuul
         private gameLogic.Stage0 stage0;
         private gameLogic.Stage1 stage1;
         private gameLogic.Stage2 stage2;
+        public gameLogic.Stage3? stage3;
 
         // Don't forget to create a new object
         public static Map map = gameLogic.StageTut.StageMap;
@@ -179,22 +180,7 @@ namespace WorldOfZuul
 
                     case "talk":
                         Screen.CommandOutputString.Add($"> {input}");
-                        switch(gameLogic.GameStage) {
-                            case 0:
-                                if(map.CurrentRoom.ShortDescription == "Mayor's Office") gameLogic.Stage0.Advisor();
-                                else Screen.CommandOutputString.Add("There is no NPC in this area to talk to.");
-                                break;
-                            case 1:
-                                if(map.CurrentRoom.ShortDescription == "Mayor's Office") gameLogic.Stage1.Advisor();
-                                else Screen.CommandOutputString.Add("There is no NPC in this area to talk to.");
-                                break;
-                            case 2:
-                                if(map.CurrentRoom.ShortDescription == "Mayor's Office") gameLogic.Stage1.Advisor();
-                                else if(map.CurrentRoom.ShortDescription == "City Centre") gameLogic.Stage2.CarVendor();
-                                else if(map.CurrentRoom.ShortDescription == "Market") gameLogic.Stage2.BikeVendor();
-                                else Screen.CommandOutputString.Add("There is no NPC in this area to talk to.");
-                                break;
-                        }
+                        gameLogic.TalkToNPC(); 
                         break;
 
                     case "quests":
