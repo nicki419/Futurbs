@@ -492,8 +492,8 @@ namespace WorldOfZuul
                         Program.game.screen.DrawInfoText();
                         Program.game.screen.DrawInputText();
                         playerAnswer = Program.game.screen.ReadLine();
-                        if(playerAnswer != null && !(playerAnswer == "renovate" || playerAnswer == "demolish")) Program.game.lastOutputString = $"Advisor: I don't understand your answer. Please tell me if you want to 'demolish' or 'renovate.' ";
-                    }while(playerAnswer != null && !(playerAnswer == "renovate" || playerAnswer == "demolish"));
+                        if(playerAnswer == null || !(playerAnswer == "renovate" || playerAnswer == "demolish")) Program.game.lastOutputString = $"Advisor: I don't understand your answer. Please tell me if you want to 'demolish' or 'renovate.' ";
+                    }while(playerAnswer == null || !(playerAnswer == "renovate" || playerAnswer == "demolish"));
                     Quests["theGhettoQuestion"].CompletionCondition = "completed";
                     if(playerAnswer == "renovate"){
                         Program.game.lastOutputString = $"Advisor : {npcs[0].Dialogue[4]}";
