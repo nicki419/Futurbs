@@ -32,7 +32,7 @@ namespace WorldOfZuul
                 Console.Write(new string(' ', Program.game.screen.TopBoxDimensions.Item1));
                 Console.SetCursorPosition(2, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + Program.game.screen.BottomBoxDimensions.Item3 + 5);
                 Console.Write($"Currently Selected: {selectedRoom.ShortDescription} \t");
-                if(Program.game.TravelByCar != null) {
+                if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] != null) {
                     Console.SetCursorPosition(Program.game.screen.TopBoxDimensions.Item1 - 27, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + Program.game.screen.BottomBoxDimensions.Item3 + 5);
                     Console.Write("Press [Enter] to fast travel.");
                 }
@@ -183,7 +183,7 @@ namespace WorldOfZuul
                     break;
                 
                 case ConsoleKey.Enter:
-                    if(Program.game.TravelByCar != null && selectedRoom != Game.map.CurrentRoom) {
+                    if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] != null && selectedRoom != Game.map.CurrentRoom) {
                         return selectedRoom;
                     }
                     break;
@@ -256,7 +256,11 @@ namespace WorldOfZuul
             }
             DrawPath();
             int travelSpeed;
-            if(Program.game.TravelByCar == true) travelSpeed = 150; else travelSpeed = 1000;
+            if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true) {
+                if(Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltCarInfrastructure] == true) travelSpeed = 100; else travelSpeed = 150;
+            } else {
+                if(Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true) travelSpeed = 500; else travelSpeed = 1000;
+            }
             GoToPath();
 
             void FindPath(Room currentRoom, string? previousRoom) {
@@ -320,7 +324,7 @@ namespace WorldOfZuul
                 Console.SetCursorPosition(1, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + Program.game.screen.BottomBoxDimensions.Item3 + 5);
                 Console.Write(new string(' ', Program.game.screen.TopBoxDimensions.Item1));
                 Console.SetCursorPosition(2, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + Program.game.screen.BottomBoxDimensions.Item3 + 5);
-                Console.Write($"{(Program.game.TravelByCar == true ? "Driving" : "Cycling")} to {selectedRoom.ShortDescription}...");
+                Console.Write($"{(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true ? "Driving" : "Cycling")} to {selectedRoom.ShortDescription}...");
 
                 Console.SetCursorPosition(currentRoomPosition.Item1, currentRoomPosition.Item2);
                 Console.Write('X');

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security;
 using System.Threading.Tasks;
 
@@ -467,6 +468,7 @@ namespace WorldOfZuul
                 if(StageProgression["mayorsDuty"] && StageProgression["theGhettoQuestion"]) {
                     GameStage = 3;
                     Program.game.stage3 = new();
+
                 };
 
             }
@@ -478,10 +480,10 @@ namespace WorldOfZuul
                 if(mayorsDutyQuest?.SubQuests != null && !mayorsDutyQuest.SubQuests[1].Completed){
                     Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[0]}";
                 }
-                else if(Program.game.TravelByCar == true){
+                else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true){
                     Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[1]}";
                 }
-                else if(Program.game.TravelByCar == false){
+                else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false){
                     Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[2]}";
                 };
 
@@ -496,19 +498,23 @@ namespace WorldOfZuul
                     }while(playerAnswer == null || !(playerAnswer == "renovate" || playerAnswer == "demolish"));
                     Quests["theGhettoQuestion"].CompletionCondition = "completed";
                     if(playerAnswer == "renovate"){
+                        Program.game.MayorDecisions[Game.MayorDecisionKeys.RenovatedGhetto] = true;
                         Program.game.lastOutputString = $"Advisor : {npcs[0].Dialogue[4]}";
                         Game.map.Rooms["ghetto"].ShortDescription = "New Living Blocks";
                         Game.map.Rooms["ghetto"].LongDescription = "The newly renovated Ghettos can hardly be referred to as such anymore. The living conditions have been improved substantially!   ";
                         
                     }else {
+                        Program.game.MayorDecisions[Game.MayorDecisionKeys.RenovatedGhetto] = false;
                         Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[5]}";
                         Game.map.Rooms["trainStation"].Exits.Remove("east");
+                        
                     }
+                    UpdateGameState();
                 }
             }
 
             public static void CarVendor(){
-                if(Program.game.TravelByCar == null){
+                if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == null){
                     string? playerAnswer;
                     Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[0]}";
                     do {
@@ -519,16 +525,16 @@ namespace WorldOfZuul
                     } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
                         if(playerAnswer == "y"){
                             Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[1]}";
-                            Program.game.TravelByCar = true;
+                            Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] = true;
                             Quests.Quest? mayorsDutyQuest;
                             if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
                         } else Program.game.lastOutputString = npcs[1].Dialogue[2];
-                } else if(Program.game.TravelByCar == true) Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[1]}";
+                } else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true) Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[1]}";
                 else Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[3]}";
             }
 
             public static void BikeVendor(){
-                if(Program.game.TravelByCar == null) {
+                if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == null) {
                     string? playerAnswer;
                     Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[0]}";
                     do {
@@ -539,11 +545,11 @@ namespace WorldOfZuul
                     } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
                     if(playerAnswer == "y") {
                         Program.game.lastOutputString = $" Bike Vendor: {npcs[2].Dialogue[1]}";
-                        Program.game.TravelByCar = false;
+                        Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] = false;
                         Quests.Quest? mayorsDutyQuest;
                         if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
                     } else Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[2]}";
-                } else if(Program.game.TravelByCar != true) Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[1]}";
+                } else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] != true) Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[1]}";
                 else Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[3]}";
             }
 
@@ -572,16 +578,30 @@ namespace WorldOfZuul
         }
 
         public class Stage3 {
-            public static Map? StageMap;
             public Dictionary<string, bool> StageProgression;
             public static Dictionary<string, Quests.Quest> Quests = new(){};
             public static NPC[] npcs = {};
             public Stage3() {
-                StageMap = GenerateMap();
-                StageMap.CurrentRoom = StageMap.Rooms["townHall"];
                 StageProgression = new(){};
+                InitialiseState();
+                UpdateGameState();
             }
 
+            public static void InitialiseState() {
+                Game.currentQuests = new();
+                Game.TrackedQuests = new();
+                
+                int questCounter = 1;
+                foreach(Quests.Quest _ in Quests.Values) {
+                    Game.currentQuests.Add(questCounter, _);
+                    ++questCounter;
+                }
+                UpdateState();
+            }
+
+            public static void UpdateState() {
+                
+            }
         }
         public static void TalkToNPC() {
             switch(GameStage) {
@@ -603,10 +623,6 @@ namespace WorldOfZuul
                     break;
             }
         }
-
-        public static Map GenerateMap() {
-            return Game.map;
-        }
         public static void UpdateGameState() {
             switch(GameStage) {
                 case -1:
@@ -622,6 +638,9 @@ namespace WorldOfZuul
                 case 2:
                     Stage2.UpdateState();
                     break;
+                case 3:
+                    Stage3.UpdateState();
+                    break;                
             }
         }
     }

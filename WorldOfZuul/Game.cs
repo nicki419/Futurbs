@@ -29,7 +29,16 @@ namespace WorldOfZuul
         public int ScrollingTextSleepDuration = 20;
         private string? input;
         public static List<Quests.Quest> TrackedQuests = new();
-        public bool? TravelByCar;
+
+        public enum MayorDecisionKeys {
+            TravelByCar,
+            RenovatedGhetto,
+            RebuiltHousing,
+            BuiltSchool,
+            BuiltBikeInfrastructure,
+            BuiltCarInfrastructure
+        }
+        public Dictionary<MayorDecisionKeys, bool?> MayorDecisions = new();
 
 
         public Game()
@@ -39,6 +48,14 @@ namespace WorldOfZuul
             stage0 = new();
             stage1 = new();
             stage2 = new();
+
+            MayorDecisions.Add(MayorDecisionKeys.RenovatedGhetto, null);
+            MayorDecisions.Add(MayorDecisionKeys.RebuiltHousing, null);
+            MayorDecisions.Add(MayorDecisionKeys.TravelByCar, null);
+            MayorDecisions.Add(MayorDecisionKeys.BuiltSchool, null);
+            MayorDecisions.Add(MayorDecisionKeys.BuiltBikeInfrastructure, null);
+            MayorDecisions.Add(MayorDecisionKeys.BuiltCarInfrastructure, null);
+            
             //map = gameLogic.Stage0.StageMap;
             //currentQuests.Add(1, gameLogic.Stage0.Quests["headToOffice"]);
             //currentQuests.Add(2, gameLogic.Stage0.Quests["talkToAdvisor"]);
