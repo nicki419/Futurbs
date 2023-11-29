@@ -71,7 +71,7 @@ namespace WorldOfZuul
 
             public static NPC[] npcs = {
                 new(
-                    "Advisor",
+                    "Advisor ",
                     "Your Advisor in all matters around the city",
                     new() {
                         {0, "Welcome to the city, Sir! Care to share your name?"},
@@ -128,15 +128,15 @@ namespace WorldOfZuul
 
             public static void Advisor() {
                 if(!Quests["talkToAdvisor"].Completed) {
-                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[0]}";
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[0]}";
                     do {
                         Program.game.screen.DrawInfoText();
                         Program.game.screen.DrawInputText();
                         Game.playerName = Program.game.screen.ReadLine()?.ToUpper();
                         if(Game.playerName != null) Game.playerName = new String(Game.playerName.Select((ch, index) => (index == 0) ? ch : Char.ToLower(ch)).ToArray());
-                        if(Game.playerName == null) Program.game.lastOutputString = $"Advisor: You can't be without a name, mayor, can you? Please tell me your name.";
+                        if(Game.playerName == null) Program.game.lastOutputString = $"{npcs[0].Name}: You can't be without a name, mayor, can you? Please tell me your name.";
                     } while(Game.playerName == null);
-                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[1].Replace("[playerName]", Game.playerName)}";
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[1].Replace("[playerName]", Game.playerName)}";
                     Quests["talkToAdvisor"].CompletionCondition = "completed";
                 
                 }
@@ -315,9 +315,9 @@ namespace WorldOfZuul
             }
 
             public static void Advisor() {
-                if(!Quests["exploreCity"].Completed) Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[0]}";
+                if(!Quests["exploreCity"].Completed) Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[0]}";
                 else {
-                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[1].Replace("[playerName]", Game.playerName)}";
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[1].Replace("[playerName]", Game.playerName)}";
                     Quests["talkToAdvisor"].Completed = true;
                 }
             }
@@ -374,7 +374,7 @@ namespace WorldOfZuul
                 
             public static NPC[] npcs = {
                 new(
-                    "Advisor",
+                    "Advisor Nick",
                     "Your Advisor in all matters around the city",
                     new() {
                         {0, "You need to choose a mode of transportation, you can go to the City center and proceed to the car dealership, alternativly you can go to the Market and get a bike, which might be better but slower."},
@@ -388,7 +388,7 @@ namespace WorldOfZuul
                     StageMap.Rooms["mayorsOffice"]
                 ),
                 new(
-                    "Car Vendor",
+                    "Car Vendor Petar",
                     "Your go to man for vehicular travel",
                     new() {
                         {0, "Welcome mayor to my humble garage, which takes care of all your vehicular needs. I heard you are in need of a car and I have specially prepared a 2009 VW Passat 2.0 TDI just for you boss man. Would you like this car? (y/n)"},
@@ -400,8 +400,8 @@ namespace WorldOfZuul
                     StageMap.Rooms["cityCentre"]
                 ),
                 new(
-                    "Bike Vendor",
-                    "The man that specialises in two wheel",
+                    "Bike Vendor Mónica",
+                    "The Woman specialising in two-wheeled endeavours.",
                     new() {
                         {0, "Welcome, Mayor! I'm glad you want to travel around by bike. While it might not be the fastest way to get around, it is most certainly the best for the environment! Would you like a bike? (y/n)"},
                         {1, "Thank you for choosing to travel by bike! Use the map command, select your destination with the arrow keys, and press [Enter] to travel anywhere in the city."},
@@ -412,8 +412,8 @@ namespace WorldOfZuul
                     StageMap.Rooms["market"]
                 ),
                 new(
-                    "Informant",
-                    "The man that knows all the new's of Futurbs",
+                    "Informant Arhan",
+                    "The man that knows all the news of Futurbs",
                     new(){
                         {0, "Hello, Mayor! On todays new's the city is doing moderatly well, except there has been some concerns in The Ghetto you should talk to the citizens there to find out what are their concerns."},
                         {1, "What a lovely day, isn't it [playerName]?"}
@@ -422,8 +422,8 @@ namespace WorldOfZuul
                     StageMap.Rooms["townHall"]
                 ),
                 new(
-                    "Ghetto Citizen",
-                    "A random denisen of The Ghetto",
+                    "Ghetto Citizen Rokas",
+                    "One of the last citizens of the ghetto",
                     new(){
                         {0, "What a pleasent surprise, welcome Mayor. Life in The Ghetto is tough, especially these times; but it's the only place that people like me can afford to live nowadays. It would be nice to see this place renovated, but that isn't in our hands."},
                         {1, "I once was a mayor like you, but then I got an arrow to the knee"}
@@ -478,17 +478,17 @@ namespace WorldOfZuul
                 Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest);
                 
                 if(mayorsDutyQuest?.SubQuests != null && !mayorsDutyQuest.SubQuests[1].Completed){
-                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[0]}";
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[0]}";
                 }
                 else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true){
-                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[1]}";
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[1]}";
                 }
                 else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false){
-                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[2]}";
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[2]}";
                 };
 
                 if(Quests["mayorsDuty"].Completed && Quests.ContainsKey("theGhettoQuestion") && !Quests["theGhettoQuestion"].Completed){
-                    Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[3]}";
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[3]}";
                     string? playerAnswer;
                     do{
                         Program.game.screen.DrawInfoText();
@@ -516,21 +516,21 @@ namespace WorldOfZuul
             public static void CarVendor(){
                 if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == null){
                     string? playerAnswer;
-                    Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[0]}";
+                    Program.game.lastOutputString = $"{npcs[1].Name}: {npcs[1].Dialogue[0]}";
                     do {
                         Program.game.screen.DrawInfoText();
                         Program.game.screen.DrawInputText();
                         playerAnswer = Program.game.screen.ReadLine();
-                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "Car Vendor: I don't understand your answer. Do you want the car? Answer either 'y' for yes or 'n' for no.";
+                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = $"{npcs[1].Name}: I don't understand your answer. Do you want the car? Answer either 'y' for yes or 'n' for no.";
                     } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
                         if(playerAnswer == "y"){
-                            Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[1]}";
+                            Program.game.lastOutputString = $"{npcs[1].Name}: {npcs[1].Dialogue[1]}";
                             Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] = true;
                             Quests.Quest? mayorsDutyQuest;
                             if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
                         } else Program.game.lastOutputString = npcs[1].Dialogue[2];
-                } else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true) Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[1]}";
-                else Program.game.lastOutputString = $"Car Vendor: {npcs[1].Dialogue[3]}";
+                } else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true) Program.game.lastOutputString = $"{npcs[1].Name}: {npcs[1].Dialogue[1]}";
+                else Program.game.lastOutputString = $"{npcs[1].Name}: {npcs[1].Dialogue[3]}";
             }
 
             public static void BikeVendor(){
@@ -544,13 +544,13 @@ namespace WorldOfZuul
                         if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "Bike Vendor: I don't understand your answer. Do you want the bike? Answer either 'y' for yes or 'n' for no.";
                     } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
                     if(playerAnswer == "y") {
-                        Program.game.lastOutputString = $" Bike Vendor: {npcs[2].Dialogue[1]}";
+                        Program.game.lastOutputString = $" {npcs[2].Name}: {npcs[2].Dialogue[1]}";
                         Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] = false;
                         Quests.Quest? mayorsDutyQuest;
                         if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
-                    } else Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[2]}";
+                    } else Program.game.lastOutputString = $"{npcs[2].Name}: {npcs[2].Dialogue[2]}";
                 } else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] != true) Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[1]}";
-                else Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[3]}";
+                else Program.game.lastOutputString = $"Monica: {npcs[2].Dialogue[3]}";
             }
 
             public static void Informant(){
@@ -558,10 +558,10 @@ namespace WorldOfZuul
                 Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest);
                 if(mayorsDutyQuest?.SubQuests != null && (!mayorsDutyQuest.SubQuests[3].Completed || !mayorsDutyQuest.SubQuests[2].Completed))
                 {
-                    Program.game.lastOutputString = $"Informant: {npcs[3].Dialogue[0]}";
+                    Program.game.lastOutputString = $"{npcs[3].Name}: {npcs[3].Dialogue[0]}";
                     if(!mayorsDutyQuest.SubQuests[2].Completed) mayorsDutyQuest.SubQuests[2].CompletionCondition = "completed";
                 }else{
-                    Program.game.lastOutputString = $"Informant: {npcs[3].Dialogue[1].Replace("[playerName]", Game.playerName)}";
+                    Program.game.lastOutputString = $"{npcs[3].Name}: {npcs[3].Dialogue[1].Replace("[playerName]", Game.playerName)}";
                 }
             }
 
@@ -569,18 +569,62 @@ namespace WorldOfZuul
                 Quests.Quest? mayorsDutyQuest;
                 Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest);
                 if(mayorsDutyQuest?.SubQuests != null && !mayorsDutyQuest.SubQuests[3].Completed){
-                    Program.game.lastOutputString = $"Ghetto Citizen: {npcs[4].Dialogue[0]} ";
+                    Program.game.lastOutputString = $"{npcs[4].Name}: {npcs[4].Dialogue[0]} ";
                     mayorsDutyQuest.SubQuests[3].CompletionCondition = "completed";
                 }else{
-                    Program.game.lastOutputString = $"Ghetto Citizen: {npcs[4].Dialogue[1]}";
+                    Program.game.lastOutputString = $"{npcs[4].Name}: {npcs[4].Dialogue[1]}";
                 }
             }
         }
 
         public class Stage3 {
             public Dictionary<string, bool> StageProgression;
-            public static Dictionary<string, Quests.Quest> Quests = new(){};
-            public static NPC[] npcs = {};
+            public static Dictionary<string, Quests.Quest> Quests = new(){
+                {"buildInfrastrucutre", new(
+                    3.1f,
+                    "Build Infrastrucutre",
+                    "The citizens would love some new Infrastructure. Talk to your advisor to make a choice on what to build.",
+                    "notCompleted",
+                    null,
+                    WorldOfZuul.Quests.QuestType.stageProgress
+                )}
+
+            };
+            public static NPC[] npcs = {
+                new(
+                    "Advisor Nick",
+                    "Your trusted Advisor in all matters.",
+                    new() {
+                        {1, "The Market is usually a good place to learn about the city. Perhaps you could overhear some chatter there, or even talk to people for more details."},
+                        {2, "Building infrastructure, huh? Well, it's either going to be in favour of cars, or bikes. Either option will allow residents to get around faster in the respective mode of transport, but keep in mind what cars mean for the environment. Which infrastructure would you like to build? (car/bike) "},
+                        {3, "[vehicle] infrastructure it is. Let's hope you made the right choice."}
+                    },
+                    "Hello there, Mayor",
+                    Game.map.Rooms["mayorsOffice"]
+                ),
+                new(
+                    "Informant Arhan",
+                    "The informant knows all about what's going on in the city.",
+                    new() {
+                        {1, "You should talk to people in the market. Talking to and overhearing the citizens talk is the best way to get firsthand information on what your citizens want."},
+                        {2, "To build infrastructure, talk to your advisor."},
+                        {3, "Having built [vehicle] infrastructure will allow you to get around faster [vehicle2] your [vehicle]."}
+                    },
+                    "Hello there, Mayor!",
+                    Game.map.Rooms["townHall"]
+
+                ),
+                new(
+                    "Resident Krzysztof",
+                    "A local resident of Futurbs, particularly fond of retro computers.",
+                    new() {
+                        {1, "Greetings, Mayor! Everyone is talking about how difficult it is to get around town recently. Perhaps you could build some new infrastructure for everyone to traverse better."},
+                        {2, "Well done, Mayor. With the new bike paths, everyone should be able to get around more swiftly on their bikes. Very climate-friendly!"},
+                        {3, "Getting around faster by car is nice, but sadly, I do not own a car... It is even more difficult and unsafe to get around by bike now."}
+                    },
+                    "Good day, Mayor!",
+                    Game.map.Rooms["market"]),
+            };
             public Stage3() {
                 StageProgression = new(){};
                 InitialiseState();
@@ -591,6 +635,8 @@ namespace WorldOfZuul
                 Game.currentQuests = new();
                 Game.TrackedQuests = new();
                 
+                Game.map.Rooms["market"].LongDescription = "The Market is as lively as ever. People are chattering happily about the town, eager to see what changes the new mayor will bring. Infrastructure seems to be especially on everyone's mind today.";
+
                 int questCounter = 1;
                 foreach(Quests.Quest _ in Quests.Values) {
                     Game.currentQuests.Add(questCounter, _);
@@ -601,6 +647,21 @@ namespace WorldOfZuul
 
             public static void UpdateState() {
                 
+            }
+            public static void Advisor() {
+                if(!Quests["buildInfrastructure"].Completed) {
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[1]}";
+                }
+            }
+
+            public static void Informant() {
+                if(!Quests["buildInfrastructure"].Completed) {
+                    Program.game.lastOutputString = $"{npcs[1].Name}: {npcs[1].Dialogue[1]}";
+                }
+            }
+
+            public static void MarketResident() {
+
             }
         }
         public static void TalkToNPC() {
