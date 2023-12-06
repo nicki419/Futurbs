@@ -13,6 +13,8 @@ namespace WorldOfZuul
         private gameLogic.StageTut stageTut;
         private gameLogic.Stage0 stage0;
         private gameLogic.Stage1 stage1;
+        private gameLogic.Stage2 stage2;
+        public gameLogic.Stage3? stage3;
 
         // Don't forget to create a new object
         public static Map map = gameLogic.StageTut.StageMap;
@@ -24,10 +26,19 @@ namespace WorldOfZuul
         public bool mapMode = false;
         public string lastOutputString = "";
         public string compareOutputString = "";
-        public int ScrollingTextSleepDuration = 20;
+        public int ScrollingTextSleepDuration = 5;
         private string? input;
         public static List<Quests.Quest> TrackedQuests = new();
-        public bool? TravelByCar;
+
+        public enum MayorDecisionKeys {
+            TravelByCar,
+            RenovatedGhetto,
+            RebuiltHousing,
+            BuiltSchool,
+            BuiltBikeInfrastructure,
+            BuiltCarInfrastructure
+        }
+        public Dictionary<MayorDecisionKeys, bool?> MayorDecisions = new();
 
 
         public Game()
@@ -36,6 +47,15 @@ namespace WorldOfZuul
             stageTut = new();
             stage0 = new();
             stage1 = new();
+            stage2 = new();
+
+            MayorDecisions.Add(MayorDecisionKeys.RenovatedGhetto, null);
+            MayorDecisions.Add(MayorDecisionKeys.RebuiltHousing, null);
+            MayorDecisions.Add(MayorDecisionKeys.TravelByCar, null);
+            MayorDecisions.Add(MayorDecisionKeys.BuiltSchool, null);
+            MayorDecisions.Add(MayorDecisionKeys.BuiltBikeInfrastructure, null);
+            MayorDecisions.Add(MayorDecisionKeys.BuiltCarInfrastructure, null);
+            
             //map = gameLogic.Stage0.StageMap;
             //currentQuests.Add(1, gameLogic.Stage0.Quests["headToOffice"]);
             //currentQuests.Add(2, gameLogic.Stage0.Quests["talkToAdvisor"]);
@@ -177,16 +197,7 @@ namespace WorldOfZuul
 
                     case "talk":
                         Screen.CommandOutputString.Add($"> {input}");
-                        switch(gameLogic.GameStage) {
-                            case 0:
-                                if(map.CurrentRoom.ShortDescription == "Mayor's Office") gameLogic.Stage0.Advisor();
-                                else Screen.CommandOutputString.Add("There is no NPC in this area to talk to.");
-                                break;
-                            case 1:
-                                if(map.CurrentRoom.ShortDescription == "Mayor's Office") gameLogic.Stage1.Advisor();
-                                else Screen.CommandOutputString.Add("There is no NPC in this area to talk to.");
-                                break;
-                        }
+                        gameLogic.TalkToNPC(); 
                         break;
 
                     case "quests":
@@ -195,6 +206,7 @@ namespace WorldOfZuul
                         break;
                     
                     case "map":
+                        Screen.CommandOutputString.Add($"> {input}");
                         mapMode = true;
                         break;
 
@@ -274,7 +286,7 @@ namespace WorldOfZuul
                     outputString = "Text scrolling speed changed to 'medium'.";
                 }
                 else if(ScrollingTextSleepDuration == 20) {
-                    ScrollingTextSleepDuration = 100;
+                    ScrollingTextSleepDuration = 50;
                     outputString = "Text scrolling speed changed to 'slow'.";
                 }
                 else {
