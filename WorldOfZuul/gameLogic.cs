@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace WorldOfZuul
@@ -49,7 +50,6 @@ namespace WorldOfZuul
                 }
             }
         }
-
 
         public class Stage0 {
             public static Map StageMap = new(new string[] {"townHall", "mayorsOffice"});
@@ -307,6 +307,7 @@ namespace WorldOfZuul
                         WorldOfZuul.Quests.QuestType.stageProgress
                     ));
                     Game.currentQuests.Add(2, Quests["talkToAdvisor"]);
+                    foreach(KeyValuePair<int, Quests.Quest> _ in Game.currentQuests) _.Value.updateQuest(_.Key);
                 }
                 else if(Quests["exploreCity"].Completed && Quests.ContainsKey("talkToAdvisor") && Quests["talkToAdvisor"].Completed) {
                     GameStage = 2;
@@ -367,8 +368,7 @@ namespace WorldOfZuul
                         WorldOfZuul.Quests.QuestType.stageProgress,
                         false
                     )}, },
-                    WorldOfZuul.Quests.QuestType.subQuests,
-                    false   
+                    WorldOfZuul.Quests.QuestType.subQuests
                 )},             
             };
                 
@@ -381,8 +381,8 @@ namespace WorldOfZuul
                         {1, "Congratulations on getting a car, now you can go whereever you want instantly, albeit at the cost of polluting the city."},
                         {2, "Congratulations on getting a bike, now you can get around town faster without in a climate-friendly manner."},
                         {3, "After you have inspected the Ghetto and spoke with the residents you must now make a decision. You can either renovate it and improve the living conditions or demolish it and start from scratch. What dp you wish to do? (renovate/demolish)"},
-                        {4, "Good decision, I am sure the citizens will be looking forward to it. We shall place them in steel 18 square metter containers until the renovations are done."},
-                        {5, "A brave decision for a better future for the city. We shall place them in steel 18 square metter containers until the teraforming is done."}
+                        {4, "Good decision, I am sure the citizens will be looking forward to it. We shall place them in steel 18 square metre containers until the renovations are done."},
+                        {5, "A brave decision for a better future for the city. We shall place them in steel 18 square metre containers until the terraforming is done."}
                     },
                     $"What a lovely day, isn't it {Game.playerName}?",
                     StageMap.Rooms["mayorsOffice"]
@@ -415,8 +415,9 @@ namespace WorldOfZuul
                     "Informant Arhan",
                     "The man that knows all the news of Futurbs",
                     new(){
-                        {0, "Hello, Mayor! On todays new's the city is doing moderatly well, except there has been some concerns in The Ghetto you should talk to the citizens there to find out what are their concerns."},
-                        {1, "What a lovely day, isn't it [playerName]?"}
+                        {0, "Hello, Mayor! On todays new's the city is doing moderatly well, except there has been some concerns in The Ghetto you should talk to the citizens there to find out what their concerns are."},
+                        {1, "What a lovely day, isn't it [playerName]?"},
+                        {2, "It looks like you've already been to the Ghetto. Well done, go talk to your Advisor."}
                     },
                     "",
                     StageMap.Rooms["townHall"]
@@ -465,7 +466,7 @@ namespace WorldOfZuul
                     Game.currentQuests.Add(2, Quests["theGhettoQuestion"]);
                     Quests["theGhettoQuestion"].updateQuest(2);
                 }
-                if(StageProgression["mayorsDuty"] && StageProgression["theGhettoQuestion"]) {
+                if(Quests["mayorsDuty"].Completed && Quests.ContainsKey("theGhettoQuestion") && Quests["theGhettoQuestion"].Completed) {
                     GameStage = 3;
                     Program.game.stage3 = new();
 
@@ -480,12 +481,18 @@ namespace WorldOfZuul
                 if(mayorsDutyQuest?.SubQuests != null && !mayorsDutyQuest.SubQuests[1].Completed){
                     Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[0]}";
                 }
-                else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true){
+                else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == true && Quests.ContainsKey("theGhettoQuestion") && !Quests["theGhettoQuestion"].Completed){
                     Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[1]}";
                 }
-                else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false){
+                else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false && Quests.ContainsKey("theGhettoQuestion") && !Quests["theGhettoQuestion"].Completed){
                     Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[2]}";
-                };
+                }
+                else if(Quests.ContainsKey("theGhettoQuestion") && Quests["theGhettoQuestion"].Completed && Program.game.MayorDecisions[Game.MayorDecisionKeys.RenovatedGhetto] == true) {
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[4]}";
+                }
+                else {
+                    Program.game.lastOutputString = $"{npcs[0].Name}: What a lovely day, isn't it {Game.playerName}?";
+                }
 
                 if(Quests["mayorsDuty"].Completed && Quests.ContainsKey("theGhettoQuestion") && !Quests["theGhettoQuestion"].Completed){
                     Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[3]}";
@@ -494,18 +501,18 @@ namespace WorldOfZuul
                         Program.game.screen.DrawInfoText();
                         Program.game.screen.DrawInputText();
                         playerAnswer = Program.game.screen.ReadLine();
-                        if(playerAnswer == null || !(playerAnswer == "renovate" || playerAnswer == "demolish")) Program.game.lastOutputString = $"Advisor: I don't understand your answer. Please tell me if you want to 'demolish' or 'renovate.' ";
+                        if(playerAnswer == null || !(playerAnswer == "renovate" || playerAnswer == "demolish")) Program.game.lastOutputString = $"{npcs[0].Name}: I don't understand your answer. Please tell me if you want to 'demolish' or 'renovate.' ";
                     }while(playerAnswer == null || !(playerAnswer == "renovate" || playerAnswer == "demolish"));
                     Quests["theGhettoQuestion"].CompletionCondition = "completed";
                     if(playerAnswer == "renovate"){
                         Program.game.MayorDecisions[Game.MayorDecisionKeys.RenovatedGhetto] = true;
-                        Program.game.lastOutputString = $"Advisor : {npcs[0].Dialogue[4]}";
+                        Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[4]}";
                         Game.map.Rooms["ghetto"].ShortDescription = "New Living Blocks";
                         Game.map.Rooms["ghetto"].LongDescription = "The newly renovated Ghettos can hardly be referred to as such anymore. The living conditions have been improved substantially!   ";
                         
                     }else {
                         Program.game.MayorDecisions[Game.MayorDecisionKeys.RenovatedGhetto] = false;
-                        Program.game.lastOutputString = $"Advisor: {npcs[0].Dialogue[5]}";
+                        Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[5]}";
                         Game.map.Rooms["trainStation"].Exits.Remove("east");
                         
                     }
@@ -541,7 +548,7 @@ namespace WorldOfZuul
                         Program.game.screen.DrawInfoText();
                         Program.game.screen.DrawInputText();
                         playerAnswer = Program.game.screen.ReadLine();
-                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = "Bike Vendor: I don't understand your answer. Do you want the bike? Answer either 'y' for yes or 'n' for no.";
+                        if(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n")) Program.game.lastOutputString = $"{npcs[2].Name}: I don't understand your answer. Do you want the bike? Answer either 'y' for yes or 'n' for no.";
                     } while(playerAnswer != null && !(playerAnswer == "y" || playerAnswer == "n"));
                     if(playerAnswer == "y") {
                         Program.game.lastOutputString = $" {npcs[2].Name}: {npcs[2].Dialogue[1]}";
@@ -549,7 +556,7 @@ namespace WorldOfZuul
                         Quests.Quest? mayorsDutyQuest;
                         if(Quests.TryGetValue("mayorsDuty", out mayorsDutyQuest) && mayorsDutyQuest.SubQuests != null) mayorsDutyQuest.SubQuests[1].CompletionCondition = "completed";
                     } else Program.game.lastOutputString = $"{npcs[2].Name}: {npcs[2].Dialogue[2]}";
-                } else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] != true) Program.game.lastOutputString = $"Bike Vendor: {npcs[2].Dialogue[1]}";
+                } else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] != true) Program.game.lastOutputString = $"{npcs[2].Name}: {npcs[2].Dialogue[1]}";
                 else Program.game.lastOutputString = $"Monica: {npcs[2].Dialogue[3]}";
             }
 
@@ -580,13 +587,32 @@ namespace WorldOfZuul
         public class Stage3 {
             public Dictionary<string, bool> StageProgression;
             public static Dictionary<string, Quests.Quest> Quests = new(){
-                {"buildInfrastrucutre", new(
+                {"buildInfrastructure", new(
                     3.1f,
-                    "Build Infrastrucutre",
+                    "Build Infrastructure",
                     "The citizens would love some new Infrastructure. Talk to your advisor to make a choice on what to build.",
                     "notCompleted",
-                    null,
-                    WorldOfZuul.Quests.QuestType.stageProgress
+                    new() {
+                        {1, new(
+                            3.11f,
+                            "Get Info from Citizens",
+                            "",
+                            "notCompleted",
+                            null,
+                            WorldOfZuul.Quests.QuestType.stageProgress,
+                            false
+                        )},
+                        {2, new(
+                            3.12f,
+                            "Make a Decision with your Advisor",
+                            "",
+                            "notCompleted",
+                            null,
+                            WorldOfZuul.Quests.QuestType.stageProgress,
+                            false
+                        )}
+                    },
+                    WorldOfZuul.Quests.QuestType.subQuests
                 )}
 
             };
@@ -646,22 +672,144 @@ namespace WorldOfZuul
             }
 
             public static void UpdateState() {
-                
+                foreach(KeyValuePair<int, Quests.Quest> _ in Game.currentQuests) _.Value.updateQuest(_.Key);
+                if(Quests["buildInfrastructure"].Completed && !Quests.ContainsKey("finishingUp")){
+                    Quests.Add("finishingUp", new(
+                        3.2f,
+                        "Finishing Up",
+                        "Having built [vehicle] infrastructure, [vehicle2] back to the market to see what Resident Krzysztof thinks, then talk to your informant to find out how you did on your overall journey.".Replace("[vehicle]", Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true ? "bike" : "car").Replace("[vehicle2]", Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false ? "cycle" : "drive"),
+                        "notCompleted",
+                        new() {
+                            {1, new(
+                                3.21f,
+                                "Talk to Market Resident",
+                                "",
+                                "notCompleted",
+                                null,
+                                WorldOfZuul.Quests.QuestType.stageProgress,
+                                false
+                            )},
+                            {2, new(
+                                3.22f,
+                                "Talk to Informant",
+                                "",
+                                "notCompleted",
+                                null,
+                                WorldOfZuul.Quests.QuestType.stageProgress,
+                                false
+                            )}
+                        },
+                        WorldOfZuul.Quests.QuestType.subQuests
+                    ));
+                    Game.currentQuests.Add(2, Quests["finishingUp"]);
+                    Quests["finishingUp"].updateQuest(2);
+                }
             }
             public static void Advisor() {
+                Quests.Quest? buildInfrastructureQuest;
+                Quests.TryGetValue("buildInfrastructure", out buildInfrastructureQuest);
+                
                 if(!Quests["buildInfrastructure"].Completed) {
-                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[1]}";
+                    if(buildInfrastructureQuest?.SubQuests != null && !buildInfrastructureQuest.SubQuests[1].Completed && !buildInfrastructureQuest.SubQuests[2].Completed) Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[1]}";
+                    else if(buildInfrastructureQuest?.SubQuests != null && buildInfrastructureQuest.SubQuests[1].Completed && !buildInfrastructureQuest.SubQuests[2].Completed) {
+                        Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[2]}"; 
+                        string? playerAnswer;
+                        do{
+                            Program.game.screen.DrawInfoText();
+                            Program.game.screen.DrawInputText();
+                            playerAnswer = Program.game.screen.ReadLine();
+                            if(playerAnswer == null || !(playerAnswer == "bike" || playerAnswer == "car")) Program.game.lastOutputString = $"{npcs[0].Name}: I don't understand your answer. Please tell me if you want to build 'car' or 'bike' infrastructre.";
+                        }while(playerAnswer == null || !(playerAnswer == "bike" || playerAnswer == "car"));
+                        buildInfrastructureQuest.SubQuests[2].Completed = true;
+                        Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[3].Replace("[vehicle]", playerAnswer == "bike" ? "Bike" : "Car")}";
+                        if(playerAnswer == "bike") Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] = true;
+                        else Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltCarInfrastructure] = true;
+
+
+                    }
                 }
+                else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true) {
+                    Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[3].Replace("[vehicle]", "Bike")}";
+                }
+                else Program.game.lastOutputString = $"{npcs[0].Name}: {npcs[0].Dialogue[3].Replace("[vehicle]", "Car")}";
             }
 
             public static void Informant() {
+                Quests.Quest? finishingUpQuest;
+                Quests.TryGetValue("finishingUp", out finishingUpQuest);
+
                 if(!Quests["buildInfrastructure"].Completed) {
                     Program.game.lastOutputString = $"{npcs[1].Name}: {npcs[1].Dialogue[1]}";
+                }
+                else if(Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true) {
+                    Program.game.lastOutputString = $"{npcs[1].Name}: {npcs[1].Dialogue[3].Replace("[vehicle]", "bike").Replace("[vehicle2]", "on")}";
+                }
+                else {
+                    Program.game.lastOutputString = $"{npcs[1].Name}: {npcs[1].Dialogue[3].Replace("[vehicle]", "car").Replace("[vehicle2]", "in")}";
+                }
+
+                if(finishingUpQuest?.SubQuests != null && !finishingUpQuest.SubQuests[1].Completed) {
+                    Program.game.lastOutputString = $"{npcs[1].Name}: Please talk to the Market Resident first before wrapping up your Journey.";
+                }
+                else if(finishingUpQuest?.SubQuests != null && finishingUpQuest.SubQuests[1].Completed) {
+                    finishingUpQuest.SubQuests[2].Completed = true;
+                    int goodDecisions = 0;
+                    if(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false) ++goodDecisions;
+                    if(Program.game.MayorDecisions[Game.MayorDecisionKeys.RenovatedGhetto] == true) ++goodDecisions;
+                    if(Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true) ++goodDecisions;
+
+                    Program.game.lastOutputString = $"{npcs[1].Name}: Well done, mayor! Since you swore the oath to your office, you have made the following decisions:\n    You chose to travel by {(Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false ? "bike" : "car")},\n    You {(Program.game.MayorDecisions[Game.MayorDecisionKeys.RenovatedGhetto] == true ? "renovated" : "demolished")} the Ghetto, and\n    You built {(Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true ? "bike" : "car")} infrastructure.\n\n[Press any key to continue]";
+                    Program.game.screen.DrawInfoText();
+                    Console.ReadKey(true);
+                    switch(goodDecisions) {
+                        case 0:
+                            Program.game.lastOutputString = $"{npcs[1].Name}: 0 of your decisions made were sustainable. To build better cities for everyone, decent non-car infrastructure and avid solutions for housing is a must. \n\n[Press any key to continue]";
+                            break;
+                        
+                        case 1:
+                            Program.game.lastOutputString = $"{npcs[1].Name}: 1 of your decisions made was sustainable. To build better cities for everyone, decent non-car infrastructure and avid solutions for housing is a must. \n\n[Press any key to continue]";
+                            break;
+
+                        case 2:
+                            Program.game.lastOutputString = $"{npcs[1].Name}: 2 of your decisions made were sustainable. Decently done. Keep up the great work to make Futurbs a city sustainable for everyone! \n\n[Press any key to continue]";
+                            break;
+                        
+                        case 3:
+                            Program.game.lastOutputString = $"{npcs[1].Name}: All decisions you made were sustainable. You did an amazing job and seem to have a perfect understanding of sustainable cities! Well done! \n\n[Press any key to continue]";
+                            break;
+                    }
+                    Program.game.screen.DrawInfoText();
+                    Console.ReadKey(true);
+                    Program.game.lastOutputString = $"{npcs[1].Name}: If you would like to learn more about sustainable cities, please consider the following resources:\n    YouTube: Not Just Bikes\n    YouTube: City Beautiful\n    YouTube: Adam Something\n    www.StrongTowns.org\n\n[Press any key to exit]";
+                    Program.game.screen.DrawInfoText();
+                    Console.ReadKey(true);
+                    Console.Clear();
+                    Console.SetCursorPosition(0,0);
+                    Console.WriteLine("Thank you for playing Futurbs!");
+                    Environment.Exit(1);
                 }
             }
 
             public static void MarketResident() {
+                Quests.Quest? buildInfrastructureQuest;
+                Quests.TryGetValue("buildInfrastructure", out buildInfrastructureQuest);
+                Quests.Quest? finishingUpQuest;
+                Quests.TryGetValue("finishingUp", out finishingUpQuest);
 
+                if(buildInfrastructureQuest?.SubQuests != null && !buildInfrastructureQuest.SubQuests[1].Completed) {
+                    Program.game.lastOutputString = $"{npcs[2].Name}: {npcs[2].Dialogue[1]}";
+                    buildInfrastructureQuest.SubQuests[1].Completed = true;
+                }
+                else if(buildInfrastructureQuest?.SubQuests != null && buildInfrastructureQuest.SubQuests[2].Completed) {
+                    if(Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true) {
+                        Program.game.lastOutputString = $"{npcs[2].Name}: {npcs[2].Dialogue[2]}";
+                        if(finishingUpQuest?.SubQuests != null && !finishingUpQuest.SubQuests[1].Completed) finishingUpQuest.SubQuests[1].Completed = true;
+                    }
+                    else {
+                        Program.game.lastOutputString = $"{npcs[2].Name}: {npcs[2].Dialogue[3]}";
+                        if(finishingUpQuest?.SubQuests != null && !finishingUpQuest.SubQuests[1].Completed) finishingUpQuest.SubQuests[1].Completed = true;
+                    }
+                }
             }
         }
         public static void TalkToNPC() {
@@ -680,6 +828,12 @@ namespace WorldOfZuul
                     else if(Game.map.CurrentRoom.ShortDescription == "Market") Stage2.BikeVendor();
                     else if(Game.map.CurrentRoom.ShortDescription == "Ghetto") Stage2.GhettoCitizen();
                     else if(Game.map.CurrentRoom.ShortDescription == "Town Hall") Stage2.Informant();
+                    else Screen.CommandOutputString.Add("There is no NPC in this area to talk to.");
+                    break;
+                case 3:
+                    if(Game.map.CurrentRoom.ShortDescription == "Mayor's Office") Stage3.Advisor();
+                    else if(Game.map.CurrentRoom.ShortDescription == "Market") Stage3.MarketResident();
+                    else if(Game.map.CurrentRoom.ShortDescription == "Town Hall") Stage3.Informant();
                     else Screen.CommandOutputString.Add("There is no NPC in this area to talk to.");
                     break;
             }

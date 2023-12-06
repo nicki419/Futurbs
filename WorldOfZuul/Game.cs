@@ -26,7 +26,7 @@ namespace WorldOfZuul
         public bool mapMode = false;
         public string lastOutputString = "";
         public string compareOutputString = "";
-        public int ScrollingTextSleepDuration = 20;
+        public int ScrollingTextSleepDuration = 5;
         private string? input;
         public static List<Quests.Quest> TrackedQuests = new();
 
@@ -286,7 +286,7 @@ namespace WorldOfZuul
                     outputString = "Text scrolling speed changed to 'medium'.";
                 }
                 else if(ScrollingTextSleepDuration == 20) {
-                    ScrollingTextSleepDuration = 100;
+                    ScrollingTextSleepDuration = 50;
                     outputString = "Text scrolling speed changed to 'slow'.";
                 }
                 else {
