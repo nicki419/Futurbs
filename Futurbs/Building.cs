@@ -1,4 +1,4 @@
-namespace WorldOfZuul {
+namespace Futurbs {
     public class Building {
         public string Name;
         public enum State {

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorldOfZuul
+namespace Futurbs
 {
     public class Command
     {
         public string Name { get; }
-        public string[]? SecondWord { get; } // this might be used for future expansions, such as "take apple".
+        public string[]? SecondWord { get; }
 
-        // Change variable names to be more coherent
         public Command(string name, string[]? secondWord = null)
         {
             Name = name;

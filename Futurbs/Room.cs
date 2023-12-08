@@ -1,4 +1,4 @@
-﻿namespace WorldOfZuul
+﻿namespace Futurbs
 {
     public class Room
     {

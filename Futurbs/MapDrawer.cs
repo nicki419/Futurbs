@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WorldOfZuul
+namespace Futurbs
 {
     public class MapDrawer
     {
@@ -56,7 +49,7 @@ namespace WorldOfZuul
             } else Console.Write("[ ]");
             
             
-            if(gameLogic.GameStage >= 0) {
+            if(GameLogic.GameStage >= 0) {
                 processedRooms.Add(Game.map.Rooms["cityCentre"]);
 
                 Console.SetCursorPosition(Program.game.screen.TopBoxDimensions.Item1/2 + 1, Program.game.screen.NamecardDimensions.Item2 + Program.game.screen.TopBoxDimensions.Item3 + 5);
@@ -273,8 +266,6 @@ namespace WorldOfZuul
                                 if(_.Value == selectedRoom) {
                                     ++dictIndex;
                                     possiblePaths.Add(dictIndex, new(possiblePaths[dictIndex - 1]));
-                                    //possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
-                                    //return;
                                 }
                                 FindPath(_.Value, "south");
                                 break;
@@ -284,8 +275,6 @@ namespace WorldOfZuul
                                 if(_.Value == selectedRoom) {
                                     ++dictIndex;
                                     possiblePaths.Add(dictIndex, new(possiblePaths[dictIndex - 1]));
-                                    //possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
-                                    //return;
                                 }
                                 FindPath(_.Value, "west");
                                 break;
@@ -295,8 +284,6 @@ namespace WorldOfZuul
                                 if(_.Value == selectedRoom) {
                                     ++dictIndex;
                                     possiblePaths.Add(dictIndex, new(possiblePaths[dictIndex - 1]));
-                                    //possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
-                                    //return;
                                 }
                                 FindPath(_.Value, "north");
                                 break;
@@ -306,8 +293,6 @@ namespace WorldOfZuul
                                 if(_.Value == selectedRoom) {
                                     ++dictIndex;
                                     possiblePaths.Add(dictIndex, new(possiblePaths[dictIndex - 1]));
-                                    //possiblePaths[dictIndex].RemoveAt(possiblePaths[dictIndex].Count - 1);
-                                    //return;
                                 }
                                 FindPath(_.Value, "east");
                                 break;

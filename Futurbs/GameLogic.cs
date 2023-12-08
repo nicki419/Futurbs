@@ -1,19 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-
-namespace WorldOfZuul
+namespace Futurbs
 {
-    public class gameLogic
+    public class GameLogic
     {
         public static int GameStage;
 
-        public gameLogic() {
+        public GameLogic() {
             GameStage = -1;
         }
 
@@ -28,7 +19,7 @@ namespace WorldOfZuul
                     "Use 'help' to get an overview of commands to use. Use 'help' followed by the command name to learn how to use that command, e.g. 'help quests'. To finish this quest, track it.",
                     "notCompleted",
                     null,
-                    WorldOfZuul.Quests.QuestType.stageProgress
+                    Futurbs.Quests.QuestType.stageProgress
                 )}
             };
 
@@ -61,7 +52,7 @@ namespace WorldOfZuul
                 "Use cardinal direction commands to navigate to your office.",
                 "Mayor's Office",
                 null,
-                WorldOfZuul.Quests.QuestType.visitRoom
+                Futurbs.Quests.QuestType.visitRoom
             )}
             };
 
@@ -84,14 +75,10 @@ namespace WorldOfZuul
 
             public Stage0() {
                 StageMap.Rooms["cityCentre"].SetExits(StageMap.Rooms["townHall"], null, null, null);
-                //StageMap.CurrentRoom = StageMap.Rooms["cityCentre"];
             }
 
             public static void InitialiseState() {
                 Game.currentQuests = new();
-                //Game.TrackedQuests = new();
-                //foreach(int _ in Game.currentQuests.Keys) Game.currentQuests.Remove(_);
-
                 int questCounter = 1;
                 foreach(Quests.Quest _ in Quests.Values) {
                     Game.currentQuests.Add(questCounter, _);
@@ -101,7 +88,6 @@ namespace WorldOfZuul
                 StageMap.CurrentRoom = StageMap.Rooms["cityCentre"];
                 UpdateState();
                 Program.game.lastOutputString = StageMap.Rooms["cityCentre"].LongDescription;
-                //Program.game.screen.DrawInfoText();
             }
             public static void UpdateState() {
                 foreach(KeyValuePair<int, Quests.Quest> _ in Game.currentQuests) _.Value.updateQuest(_.Key);
@@ -113,7 +99,7 @@ namespace WorldOfZuul
                         "After navigating to your office, use the talk command to talk to your advisor.",
                         "uncompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.stageProgress
+                        Futurbs.Quests.QuestType.stageProgress
                     ));
                     Game.currentQuests.Add(2, Quests["talkToAdvisor"]);
                     Quests["talkToAdvisor"].updateQuest(2);
@@ -123,7 +109,6 @@ namespace WorldOfZuul
                     GameStage = 1;
                     Stage1.InitialiseState();
                 }
-                //Game.map = StageMap;
             }
 
             public static void Advisor() {
@@ -160,7 +145,7 @@ namespace WorldOfZuul
                         "",
                         "City Centre",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {2, new(
@@ -169,7 +154,7 @@ namespace WorldOfZuul
                         "",
                         "Train Station",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {3, new(
@@ -178,7 +163,7 @@ namespace WorldOfZuul
                         "",
                         "Ghetto",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {4, new(
@@ -187,7 +172,7 @@ namespace WorldOfZuul
                         "",
                         "Park 2",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {5, new(
@@ -196,7 +181,7 @@ namespace WorldOfZuul
                         "",
                         "Park 1",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {6, new(
@@ -205,7 +190,7 @@ namespace WorldOfZuul
                         "",
                         "Residential Blocks",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {7, new(
@@ -214,7 +199,7 @@ namespace WorldOfZuul
                         "",
                         "Industrial Zone",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {8, new(
@@ -223,7 +208,7 @@ namespace WorldOfZuul
                         "",
                         "Recreational Area 2",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {9, new(
@@ -232,7 +217,7 @@ namespace WorldOfZuul
                         "",
                         "Market",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {10, new(
@@ -241,7 +226,7 @@ namespace WorldOfZuul
                         "",
                         "Residential Houses",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                     {11, new(
@@ -250,11 +235,11 @@ namespace WorldOfZuul
                         "",
                         "Recreational Area 1",
                         null,
-                        WorldOfZuul.Quests.QuestType.visitRoom,
+                        Futurbs.Quests.QuestType.visitRoom,
                         false
                     )},
                 },
-                WorldOfZuul.Quests.QuestType.subQuests
+                Futurbs.Quests.QuestType.subQuests
             )},
             };
 
@@ -282,7 +267,6 @@ namespace WorldOfZuul
             public static void InitialiseState() {
                 Game.currentQuests = new();
                 Game.TrackedQuests = new();
-                //foreach(int _ in Game.currentQuests.Keys) Game.currentQuests.Remove(_);
 
                 int questCounter = 1;
                 foreach(Quests.Quest _ in Quests.Values) {
@@ -304,7 +288,7 @@ namespace WorldOfZuul
                         "Return to your office to tell your advisor that you have visited the city.",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.stageProgress
+                        Futurbs.Quests.QuestType.stageProgress
                     ));
                     Game.currentQuests.Add(2, Quests["talkToAdvisor"]);
                     foreach(KeyValuePair<int, Quests.Quest> _ in Game.currentQuests) _.Value.updateQuest(_.Key);
@@ -346,7 +330,7 @@ namespace WorldOfZuul
                         "",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.stageProgress,
+                        Futurbs.Quests.QuestType.stageProgress,
                         false
                     )},
                     
@@ -356,7 +340,7 @@ namespace WorldOfZuul
                         "",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.stageProgress,
+                        Futurbs.Quests.QuestType.stageProgress,
                         false
                     )},
                     {3, new(
@@ -365,10 +349,10 @@ namespace WorldOfZuul
                         "",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.stageProgress,
+                        Futurbs.Quests.QuestType.stageProgress,
                         false
                     )}, },
-                    WorldOfZuul.Quests.QuestType.subQuests
+                    Futurbs.Quests.QuestType.subQuests
                 )},             
             };
                 
@@ -461,7 +445,7 @@ namespace WorldOfZuul
                         "Having inspected the situation in the Ghetto, you must now make a decision that impacts the future of the area. Talk to your advisor to make the decision.",
                         "notCompleted",
                         null,
-                        WorldOfZuul.Quests.QuestType.stageProgress
+                        Futurbs.Quests.QuestType.stageProgress
                     ));
                     Game.currentQuests.Add(2, Quests["theGhettoQuestion"]);
                     Quests["theGhettoQuestion"].updateQuest(2);
@@ -599,7 +583,7 @@ namespace WorldOfZuul
                             "",
                             "notCompleted",
                             null,
-                            WorldOfZuul.Quests.QuestType.stageProgress,
+                            Futurbs.Quests.QuestType.stageProgress,
                             false
                         )},
                         {2, new(
@@ -608,11 +592,11 @@ namespace WorldOfZuul
                             "",
                             "notCompleted",
                             null,
-                            WorldOfZuul.Quests.QuestType.stageProgress,
+                            Futurbs.Quests.QuestType.stageProgress,
                             false
                         )}
                     },
-                    WorldOfZuul.Quests.QuestType.subQuests
+                    Futurbs.Quests.QuestType.subQuests
                 )}
 
             };
@@ -677,7 +661,9 @@ namespace WorldOfZuul
                     Quests.Add("finishingUp", new(
                         3.2f,
                         "Finishing Up",
-                        "Having built [vehicle] infrastructure, [vehicle2] back to the market to see what Resident Krzysztof thinks, then talk to your informant to find out how you did on your overall journey.".Replace("[vehicle]", Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true ? "bike" : "car").Replace("[vehicle2]", Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false ? "cycle" : "drive"),
+                        "Having built [vehicle] infrastructure, [vehicle2] back to the market to see what Resident Krzysztof thinks, then talk to your informant to find out how you did on your overall journey."
+                        .Replace("[vehicle]", Program.game.MayorDecisions[Game.MayorDecisionKeys.BuiltBikeInfrastructure] == true ? "bike" : "car")
+                        .Replace("[vehicle2]", Program.game.MayorDecisions[Game.MayorDecisionKeys.TravelByCar] == false ? "cycle" : "drive"),
                         "notCompleted",
                         new() {
                             {1, new(
@@ -686,7 +672,7 @@ namespace WorldOfZuul
                                 "",
                                 "notCompleted",
                                 null,
-                                WorldOfZuul.Quests.QuestType.stageProgress,
+                                Futurbs.Quests.QuestType.stageProgress,
                                 false
                             )},
                             {2, new(
@@ -695,11 +681,11 @@ namespace WorldOfZuul
                                 "",
                                 "notCompleted",
                                 null,
-                                WorldOfZuul.Quests.QuestType.stageProgress,
+                                Futurbs.Quests.QuestType.stageProgress,
                                 false
                             )}
                         },
-                        WorldOfZuul.Quests.QuestType.subQuests
+                        Futurbs.Quests.QuestType.subQuests
                     ));
                     Game.currentQuests.Add(2, Quests["finishingUp"]);
                     Quests["finishingUp"].updateQuest(2);

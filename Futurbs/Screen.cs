@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.Serialization.Formatters;
 using System.Xml;
 
-namespace WorldOfZuul {
+namespace Futurbs {
     public class Screen {
 
         private readonly CommandWords commandWords = new();
@@ -327,7 +327,6 @@ namespace WorldOfZuul {
                 else if(new Regex("^[A-Za-z0-9_.]+$").IsMatch($"{inputKey.KeyChar}") && Console.GetCursorPosition().Left < 74) {
                     output += $"{inputKey.KeyChar}";
                     Console.Write($"{inputKey.KeyChar}".ToLower());
-                    //Console.Write(inputKey.ToString());
                 }
 
                 else if(Console.GetCursorPosition().Left == 74) {

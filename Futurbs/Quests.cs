@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WorldOfZuul
+namespace Futurbs
 {
     public class Quests
     {
@@ -65,7 +65,6 @@ namespace WorldOfZuul
                         break;
                     
                     case QuestType.stageProgress:
-                        // No idea how to implement this yet.
                         if(CompletionCondition == "completed") Completed = true;
                         break;
                 }

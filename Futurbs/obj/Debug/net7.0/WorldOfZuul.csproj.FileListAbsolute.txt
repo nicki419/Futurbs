@@ -1,0 +1,17 @@
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/bin/Debug/net7.0/WorldOfZuul
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/bin/Debug/net7.0/WorldOfZuul.deps.json
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/bin/Debug/net7.0/WorldOfZuul.runtimeconfig.json
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/bin/Debug/net7.0/WorldOfZuul.dll
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/bin/Debug/net7.0/WorldOfZuul.pdb
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.csproj.AssemblyReference.cache
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.GeneratedMSBuildEditorConfig.editorconfig
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.AssemblyInfoInputs.cache
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.AssemblyInfo.cs
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.csproj.CoreCompileInputs.cache
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.dll
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/refint/WorldOfZuul.dll
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.pdb
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.genruntimeconfig.cache
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/ref/WorldOfZuul.dll
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/bin/Debug/net7.0/Figgle.dll
+/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/Debug/net7.0/WorldOfZuul.csproj.CopyComplete

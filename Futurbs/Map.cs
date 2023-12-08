@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Security.Cryptography.X509Certificates;
 
-namespace WorldOfZuul
+namespace Futurbs
 {
     public class Map
     {

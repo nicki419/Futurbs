@@ -3,21 +3,20 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
-namespace WorldOfZuul
+namespace Futurbs
 {
     public class Game
     {
         private Room? previousRoom;
         public static string? playerName;
-        private gameLogic gameLogic;
-        private gameLogic.StageTut stageTut;
-        private gameLogic.Stage0 stage0;
-        private gameLogic.Stage1 stage1;
-        private gameLogic.Stage2 stage2;
-        public gameLogic.Stage3? stage3;
+        private GameLogic gameLogic;
+        private GameLogic.StageTut stageTut;
+        private GameLogic.Stage0 stage0;
+        private GameLogic.Stage1 stage1;
+        private GameLogic.Stage2 stage2;
+        public GameLogic.Stage3? stage3;
 
-        // Don't forget to create a new object
-        public static Map map = gameLogic.StageTut.StageMap;
+        public static Map map = GameLogic.StageTut.StageMap;
         public static Dictionary<int, Quests.Quest> currentQuests = new();
 
         public readonly Screen screen = new();
@@ -55,12 +54,6 @@ namespace WorldOfZuul
             MayorDecisions.Add(MayorDecisionKeys.BuiltSchool, null);
             MayorDecisions.Add(MayorDecisionKeys.BuiltBikeInfrastructure, null);
             MayorDecisions.Add(MayorDecisionKeys.BuiltCarInfrastructure, null);
-            
-            //map = gameLogic.Stage0.StageMap;
-            //currentQuests.Add(1, gameLogic.Stage0.Quests["headToOffice"]);
-            //currentQuests.Add(2, gameLogic.Stage0.Quests["talkToAdvisor"]);
-            //TrackedQuests.Add(currentQuests[1]);
-            //TrackedQuests.Add(currentQuests[2]);
         }
 
         public void Play()
@@ -70,17 +63,15 @@ namespace WorldOfZuul
 
             bool continuePlaying = true;
             lastOutputString = $"{map.CurrentRoom?.LongDescription}\n";
-            //PrintHelp(null);
 
             screen.InitialiseScreen();
 
             while (continuePlaying) {
                 if(mapMode) {
                     MapDrawer mapDrawer = new();
-                    //continue;
                 }
 
-                gameLogic.UpdateGameState();
+                GameLogic.UpdateGameState();
 
                 if(compareOutputString != lastOutputString) screen.DrawInfoText();
                 screen.DrawMiniMap();
@@ -147,7 +138,6 @@ namespace WorldOfZuul
                     case "look":
                         lastOutputString = $"{map.CurrentRoom?.LongDescription}\n";
                         Screen.CommandOutputString.Add($"> {input}");
-                        //Screen.CommandOutputString.Add($"{map?.CurrentRoom?.LongDescription}");
                         break;
 
                     case "back":
@@ -173,7 +163,6 @@ namespace WorldOfZuul
 
                     case "quit":
                         return false;
-                        //break;
 
                     case "help":
                         Screen.CommandOutputString.Add($"> {input}");
@@ -182,14 +171,7 @@ namespace WorldOfZuul
                     case "togglein":
                         Screen.CommandOutputString.Add($"> {input}");
                         textInput = !textInput;
-                        break;
-                    /*// UNCOMMENT WHEN READY TO BE USED IN FRONTEND - ALSO UNCOMMENT CommandWords.cs -> commandList
-                    case "build":
-                        lastOutputString = map.CreateBuilding("School", "Here Kids go to have 12 years of neverending fun!", (map.Rooms["recreationalArea1"], null, null, map.Rooms["ghetto"]));
-                        //lastOutputString += map.Rooms["School"].Exits["east"].ShortDescription;
-                        break;
-                    */
-                    
+                        break;                    
                     case "textspeed":
                         Screen.CommandOutputString.Add($"> {input}");
                         ScrollingText(command.SecondWord);
@@ -197,7 +179,7 @@ namespace WorldOfZuul
 
                     case "talk":
                         Screen.CommandOutputString.Add($"> {input}");
-                        gameLogic.TalkToNPC(); 
+                        GameLogic.TalkToNPC(); 
                         break;
 
                     case "quests":
@@ -211,7 +193,6 @@ namespace WorldOfZuul
                         break;
 
                     default:
-                        // Console Write unnecessary because of earlier input evaluation, thus passed a debug note instead.
                         Debug.WriteLine("Unexpected Error: Somehow, the default switch of CommandHandler() was triggered, which should not be possible. Ensure you validate the input passed to CommandHandler beforehand.");
                         break;
                 }
@@ -227,7 +208,6 @@ namespace WorldOfZuul
                         if(_.SubQuests != null) {
                             questString += ": ";
                             foreach(Quests.Quest sub in _.SubQuests.Values) if(!sub.Completed) questString += $"{sub.Name}, ";
-                            //foreach(Quests.Quest sub in _.SubQuests.Values) if(sub.Completed) questString += $"[X] {sub.Name}, ";
                             questString = questString.Remove(questString.Length - 2, 2);
                         }
                         questString += "\n";
@@ -298,25 +278,21 @@ namespace WorldOfZuul
                 switch(args[0]) {
                     case "instant":
                         outputString = "Text scrolling speed changed to 'instant'.";
-                        //Screen.CommandOutputString.Add($"> {input}");
                         ScrollingTextSleepDuration = 0;
                         break;
 
                     case "fast":
                         outputString = "Text scrolling speed changed to 'fast'.";
-                        //Screen.CommandOutputString.Add($"> {input}");
                         ScrollingTextSleepDuration = 5;
                         break;
 
                     case "medium":
                         outputString = "Text scrolling speed changed to 'medium'.";
-                        //Screen.CommandOutputString.Add($"> {input}");
                         ScrollingTextSleepDuration = 20;
                         break;
 
                     case "slow":
                         outputString = "Text scrolling speed changed to 'slow'.";
-                        //Screen.CommandOutputString.Add($"> {input}");
                         ScrollingTextSleepDuration = 100;
                         break;
                     default:
@@ -329,7 +305,6 @@ namespace WorldOfZuul
 
         private static void PrintHelp(string[]? arg)
         {
-            //List<string> helpStr = new();
             if(arg?.Count() == 0 && !Program.game.textInput) Program.game.lastOutputString = "Navigate through the menu by using the arrow Keys.\nPress [Enter] to select a command.\nTo get help with specific commands, please use text input mode.";   
             else if(arg?.Count() == 0 && Program.game.textInput) {
                 string helpString = "";

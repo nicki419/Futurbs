@@ -1,0 +1,118 @@
+{
+  "version": 3,
+  "targets": {
+    "net7.0": {
+      "Figgle/0.5.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Figgle.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Figgle.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Figgle/0.5.1": {
+      "sha512": "F21k9oOGRgSb+1dCX0kFDYRBbShSMFvL49xjNmF/dsJwiN5M7zBaSWsYKpi/KZWXVIIxNzTbNTq9ZciucaHYMQ==",
+      "type": "package",
+      "path": "figgle/0.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "figgle.0.5.1.nupkg.sha512",
+        "figgle.nuspec",
+        "lib/netstandard2.0/Figgle.dll",
+        "lib/netstandard2.0/Figgle.xml",
+        "logo-square-256px.png"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net7.0": [
+      "Figgle >= 0.5.1"
+    ]
+  },
+  "packageFolders": {
+    "/home/nick/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/WorldOfZuul.csproj",
+      "projectName": "WorldOfZuul",
+      "projectPath": "/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/WorldOfZuul.csproj",
+      "packagesPath": "/home/nick/.nuget/packages/",
+      "outputPath": "/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/nick/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net7.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net7.0": {
+        "targetAlias": "net7.0",
+        "dependencies": {
+          "Figgle": {
+            "target": "Package",
+            "version": "[0.5.1, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.14, 7.0.14]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.linux-x64",
+            "version": "[7.0.14, 7.0.14]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.14, 7.0.14]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.100/RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
