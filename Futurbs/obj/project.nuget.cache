@@ -1,12 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "zf6FJFhZXCXu8JPEi/hDi/3tMahsGmKHjnpj6jlp7nBpo1nFeD+YtPjU5MPhsmFAEcgyQvLgkAs4UYuhPgbhjQ==",
+  "dgSpecHash": "Ei8X+m6K4y2SyoAIJ0AVShAFAIY6DnDSjdFPghE+92EdLyeOX+OBjl3yCiv9y04hM/SvKytoo4tlyrgXIcj1zw==",
   "success": true,
-  "projectFilePath": "/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/WorldOfZuul/WorldOfZuul.csproj",
+  "projectFilePath": "/home/nick/Desktop/Uni/SDU Semester 1/Semester Project - Development of Software Programs/Futurbs/Futurbs/Futurbs.csproj",
   "expectedPackageFiles": [
     "/home/nick/.nuget/packages/figgle/0.5.1/figgle.0.5.1.nupkg.sha512",
     "/home/nick/.nuget/packages/microsoft.netcore.app.ref/7.0.14/microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "/home/nick/.nuget/packages/microsoft.netcore.app.runtime.win-x64/7.0.14/microsoft.netcore.app.runtime.win-x64.7.0.14.nupkg.sha512",
+    "/home/nick/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/7.0.14/microsoft.netcore.app.runtime.linux-x64.7.0.14.nupkg.sha512",
     "/home/nick/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.14/microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512",
+    "/home/nick/.nuget/packages/microsoft.aspnetcore.app.runtime.win-x64/7.0.14/microsoft.aspnetcore.app.runtime.win-x64.7.0.14.nupkg.sha512",
+    "/home/nick/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/7.0.14/microsoft.aspnetcore.app.runtime.linux-x64.7.0.14.nupkg.sha512",
+    "/home/nick/.nuget/packages/microsoft.netcore.app.host.win-x64/7.0.14/microsoft.netcore.app.host.win-x64.7.0.14.nupkg.sha512",
     "/home/nick/.nuget/packages/microsoft.netcore.app.host.linux-x64/7.0.14/microsoft.netcore.app.host.linux-x64.7.0.14.nupkg.sha512"
   ],
   "logs": []
